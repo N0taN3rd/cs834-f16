@@ -1,6 +1,7 @@
 \documentclass{beamer}
 \usetheme{metropolis}
 \usepackage{appendixnumberbeamer}
+\usepackage{subfigure}
 \usepackage{booktabs}
 \usepackage[scale=2]{ccicons}
 \usepackage{pgfplots}
@@ -24,8 +25,8 @@
 \author{John Berlin}
 
 \subtitle{
-\normalsize{The Deep Web: Surfacing Hidden Value} \\  \footnotesize{Michael K. Bergman} \\ 
-\normalsize{Searching for Hidden-Web Databases} \\ \footnotesize{Luciano Barbosa \& Juliana Freire}
+\normalsize{The Deep Web: Surfacing Hidden Value} \\  \footnotesize{Michael K. Bergman},  2001, Journal of Electronic Publishing\\ 
+\normalsize{Searching for Hidden-Web Databases} \\ \footnotesize{Luciano Barbosa \& Juliana Freire}, 2005, Proceedings of WebDB
 }
 
 \title{Presentation 1}
@@ -100,7 +101,7 @@ $13.6\% \approx 100$ were found not to be search sites i.e. Google like
 but provided a lower bounds size estimation by content overlap
 \begin{figure}
 			\includegraphics[height=3cm]{overlapAnalysis.png}
-			\caption{Remember Lecture 1 WebSci}
+			\caption{Remember Lecture 1 WebSci \\ Figure 3 page 4}
 	\end{figure}
 \end{frame}
 \begin{frame}[fragile]{Quantification of the deep web}
@@ -111,8 +112,14 @@ Mean \#documents of 5.43 million, median 4.95 thousand \\
 From this they estimated > 200,000 total deep web sites \\
 For a total of 543 billion documents 
 \begin{figure}
-			\includegraphics[height=4cm]{inferedDWRecSize.png}
-			\caption{ \footnotesize{Inferred Distribution of Record Size}}
+
+  \begin{minipage}[c]{0.3\textwidth}
+   \caption{ \footnotesize{Inferred Distribution of Record Size} \\ Figure 4 page 8}
+  \end{minipage}
+			\begin{minipage}[c]{0.67\textwidth}
+   \includegraphics[height=4cm]{inferedDWRecSize.png}
+  \end{minipage}
+			
 	\end{figure}
 \end{frame}
 \begin{frame}[fragile]{Quantification of the deep web}
@@ -123,9 +130,14 @@ Compared to 18.7 terabytes of the surface web at the time \\
 60 deep web sites had already known database size \\
 totaling 750 terabytes \\
 \begin{figure}
-			\includegraphics[height=4cm]{tdbSize.png}
-			\caption{\footnotesize{Inferred Distribution of Database  Size}}
-\end{figure}
+\begin{minipage}[c]{0.3\textwidth}
+   \caption{\footnotesize{Inferred Distribution of Database  Size} \\ Figure 5 page 9}
+  \end{minipage}
+			\begin{minipage}[c]{0.67\textwidth}
+  \includegraphics[height=4cm]{tdbSize.png}
+  \end{minipage}
+			
+	\end{figure}
 
 \end{frame}
 \subsection{Characterization of the deep web}
@@ -138,6 +150,7 @@ totaling 750 terabytes \\
 	It was found that they  \\
 	contained an uniform subject \\
 	distribution  \\
+	Table 6, page 9 seen left shows these findings \\
 	\column{0.5\textwidth}
   		\begin{figure}
 			\includegraphics[height=8cm]{dwsubj.png}
@@ -151,6 +164,7 @@ E-commerce along with auction and classified sites 10\% \\
 Remaining sites 10\% 
 \begin{figure}
 			\includegraphics[width=6cm]{dwct.png}
+			\caption{ Figure 6 page 10}
 		\end{figure}
 \end{frame}
 \subsection{Difficulties in retrieving deep web content }
@@ -172,6 +186,7 @@ The search engines returned only a small percentage of expected results
 \end{block}
 \begin{figure}
 			\includegraphics[width=6cm]{dwII.png}
+			\caption{Table 7 page 10}
 		\end{figure}
 \end{frame}
 \begin{frame}[fragile]{Difficulties in retrieving deep web content }
@@ -201,7 +216,7 @@ To do this the crawler uses a third classifier for forms
 \end{block}
 \begin{figure}
 			\includegraphics[width=6cm]{fca.png}
-			\caption{\footnotesize{Form Crawler Architecture}}
+			\caption{\footnotesize{Form Crawler Architecture} \\ Figure 1 page 3}
 		\end{figure}
 \end{frame}
 \subsection{Classifier Setup}
@@ -224,7 +239,7 @@ Count features in url string and document text \\
 \end{block}
 \begin{figure}
 			\includegraphics[scale=0.23]{lfs.png}
-			\caption{\footnotesize{Feature Space For Job Domain}}
+			\caption{\footnotesize{Feature Space For Job Domain} ,Table 1 page 4}
 		\end{figure}
 \end{frame}
 \begin{frame}{Classifier Setup}
@@ -239,7 +254,7 @@ Trained by finding number of tags, input fields, size of text and submission met
 \end{block}
 \begin{figure}
 			\includegraphics[scale=0.4]{cer.png}
-			\caption{\footnotesize{Test error rates for different learning algorithms}}
+			\caption{\footnotesize{Test error rates for different learning algorithms} \\ Table 2 page 4}
 		\end{figure}
 \end{frame}
 \subsection{Crawl Strategy}
@@ -256,21 +271,33 @@ Visited maximum number pages on a site \\
 \end{block}
 \end{frame}
 \subsection{Crawler Performance}
-\begin{frame}{Crawler Performance}
+\begin{frame}[fragile]{Crawler Performance}
 \begin{columns}[T,onlytextwidth]
     \column{0.5\textwidth}
-	Out of 30,000 pages \\
-3lvl crawler 2,833 forms \\
-2lvl crawler  2,511 forms \\
-3lvl vs 1 leads to improvements between 20\% to 30\% \\
+	\begin{figure*}
+\captionsetup[subfigure]{labelformat=empty}
+\subfigure{\includegraphics[width=\linewidth]{jobDomainCP.png}} 
+\subfigure{\includegraphics[width=\linewidth]{carDomainCP.png}} 
+\end{figure*}
 	\column{0.5\textwidth}
   		\begin{figure}
-			\includegraphics[height=6cm]{crawlerP.png}
-			\caption{\footnotesize{Performance of different crawlers for 3 domains}}
-\end{figure}
+		\includegraphics[width=\linewidth]{bookDomainCP.png}
+		\caption{Figure 2 page 5}
+		\end{figure}
+       \ \  Using 3 vs 1 level configuration \\ \ \ Gain improvements of \\ \ \ 20\% to 30\% \\
   \end{columns}
-
-
 \end{frame}
+\section{Conclusion}
+\begin{frame}[fragile]{Conclusion}
+\begin{block}{The Deep Web: Surfacing Hidden Value}
+Bergman provided a measurement for the deep web \\
+Showed its content is highly relevant to surface web searches \\
+Enumerated on the difficulties of crawling and extracting the content
+\end{block}
+\begin{block}{Searching for Hidden-Web Databases}
+Barbosa \& Juliana built a crawler to address the issue of  \\
+database discovery that Bergman highlighted \\
 
+\end{block}
+\end{frame}
 \end{document}
