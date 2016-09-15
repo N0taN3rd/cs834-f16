@@ -185,6 +185,92 @@ New Crawling Strategy to automatically discover hidden-web databases
 \end{frame}
 
 \begin{frame}{ Form-Focused Crawler}
-\end{frame} % to enforce entries in the table of contents
+\begin{block}{Depth Focused Crawling}
+Avoid links that lead to off-topic regions \\
+Back the crawler with a classifier to determine what is relevant \\
+The classifier is trained on the pages belonging to topics in a taxonomy e.g. \emph{dmoz.org} \\
+Links are then given to another classifier to select the most promising links in the selected page.
+\end{block}
+\end{frame} 
+\begin{frame}{ Form-Focused Crawler}
+\begin{block}{Crawler that understands form interfaces}
+Deep web use forms as the front end to databases \\
+Must know what forms are searchable or not e.g. logins \\
+And be domain-independent \\
+To do this the crawler uses a third classifier for forms
+\end{block}
+\begin{figure}
+			\includegraphics[width=6cm]{fca.png}
+			\caption{\footnotesize{Form Crawler Architecture}}
+		\end{figure}
+\end{frame}
+\subsection{Classifier Setup}
+\begin{frame}{Classifier Setup}
+\begin{block}{Link Classifier}
+Forms are sparsely distributed \\
+Selecting links with immediate benefit means you miss forms \\
+This classifier identifies links that bring \emph{delayed benefit} \\
+Or links that will \emph{eventually} lead to forms \\
+In order to know what links will do that depends on training \\
+\end{block}
+\end{frame}
+\begin{frame}{Classifier Setup}
+\begin{block}{Link Classifier - Feature space by back crawling}
+Approximation of the connectivity graph for a site \\
+Using Google's ``link:'' searches conduct bread-first crawl \\
+Starting with pages that have a searchable form \emph{level 1} \\
+Find links that point to the form level+1 \\
+Count features in url string and document text \\
+\end{block}
+\begin{figure}
+			\includegraphics[scale=0.23]{lfs.png}
+			\caption{\footnotesize{Feature Space For Job Domain}}
+		\end{figure}
+\end{frame}
+\begin{frame}{Classifier Setup}
+\begin{block}{Page Classifier}
+Uses the Rainbow classifier, na{\"i}ve Bayes \\
+Trained on pages from \emph{dmoz.org} \\
+Gives a score if the page belongs to the focus topic \\
+\end{block}
+\begin{block}{Form Classifier}
+Decision Tree classifier (C4.5) to determine searchability \\
+Trained by finding number of tags, input fields, size of text and submission method (post or get) 
+\end{block}
+\begin{figure}
+			\includegraphics[scale=0.4]{cer.png}
+			\caption{\footnotesize{Test error rates for different learning algorithms}}
+		\end{figure}
+\end{frame}
+\subsection{Crawl Strategy}
+\begin{frame}{Crawl Strategy}
+\begin{block}{Frontier Generation}
+$N$ queues determined by the number of levels used by the link classifier \\
+Prioritize links closer to target page \\
+Queues ordered by likelihood of belonging to a level \\
+\end{block}
+\begin{block}{Stopping Criteria}
+When a predetermined number of forms  has been retrieved \\
+Estimated 4.2 query interfaces (form) on any given deep web site \\
+Visited maximum number pages on a site \\ 
+\end{block}
+\end{frame}
+\subsection{Crawler Performance}
+\begin{frame}{Crawler Performance}
+\begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+	Out of 30,000 pages \\
+3lvl crawler 2,833 forms \\
+2lvl crawler  2,511 forms \\
+3lvl vs 1 leads to improvements between 20\% to 30\% \\
+	\column{0.5\textwidth}
+  		\begin{figure}
+			\includegraphics[height=6cm]{crawlerP.png}
+			\caption{\footnotesize{Performance of different crawlers for 3 domains}}
+\end{figure}
+  \end{columns}
+
+
+\end{frame}
 
 \end{document}
