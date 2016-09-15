@@ -1,21 +1,25 @@
-\documentclass[mathserif,serif,pdf]{beamer}
-\batchmode
-\usepackage[absolute,overlay]{textpos}
+\documentclass{beamer}
+\usetheme{metropolis}
+\usepackage{appendixnumberbeamer}
 \usepackage{booktabs}
 \usepackage[scale=2]{ccicons}
 \usepackage{pgfplots}
 \usepackage{xspace}
+\usepackage{graphicx}
+\usepackage{listings}
 \usepackage[english]{babel}
 \usepackage{amsmath, amsfonts, epsfig, xspace}
 \usepackage{algorithm,algorithmic}
 \usepackage{multimedia}
-\usepackage[normal,tight,center]{subfigure}
 \usepackage[T1]{fontenc}
 \usepackage{roboto} 
+\usepackage{epstopdf}
+\usepackage{caption}
+\epstopdfDeclareGraphicsRule{.gif}{png}{.png}{convert gif:#1 png:\OutputFile}
+\AppendGraphicsExtensions{.gif}
 %\usetheme{lankton-keynote}
-\usetheme{metropolis}
-%\mode<presentation>{\usetheme{metropolis}}
 
+\captionsetup{labelformat=empty}
 
 \author{John Berlin}
 
@@ -30,44 +34,157 @@
 
 \begin{document}
 
-\begin{frame}
-  \titlepage
-\end{frame}
+
+\maketitle
 
 \begin{frame}{Table of contents}
   \setbeamertemplate{section in toc}[sections numbered]
-  \tableofcontents
+  \tableofcontents[hideallsubsections]
 \end{frame}
 
 
 
 \section{Introduction}
 \subsection{What is the Deep Web?}
-\begin{frame}{What is the Deep Web?}
-Content not indexed (crawled) by search engines
-\begin{columns}[T,onlytextwidth]
-   \column{0.5\textwidth}
-      \begin{block}{ Dynamic Content}
-          Block content.
-      \end{block}
-    \column{0.5\textwidth}
-		 
-	\begin{block}{ Dynamic Content}
-        Block content.
-      \end{block}
-    
 
-      \end{columns}
-	     
+\begin{frame}[fragile]{What is the Deep Web?}
+	%\onslide<1->{
+	\begin{block}{Content not indexed (\alert{crawled}) by search engines}
+	%\onslide<2->{
+	This content is characterized as \emph{dynamic} and is generally \\
+	generated as the result of a specific query
+	%}
+  \end{block}
+  %}
+   %\onslide<3->{
+   \begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+		\begin{block}{Where does the dynamic content come from?}
+			\begin{itemize}
+    %			\onslide<4->{
+     			  \item Databases
+    %			}
+   	%			\onslide<5->{ 
+   				 \item Forms
+   	%			 }
+  			\end{itemize}
+  		\end{block}
+	\column{0.5\textwidth}
+  		\begin{figure}
+			\includegraphics[scale=0.3]{invisible-web.gif}
+		\end{figure}
+  \end{columns}
+  %}
+\end{frame}
+
+\section{The Deep Web: Surfacing Hidden Value}
+\subsection{Contribution}
+\begin{frame}{Bergman's Contribution}
+\begin{block}{}
+			\begin{itemize}
+    %			\onslide<1->{
+     			  \item A quantification for the size of the deep Web
+    %			}
+   	%			\onslide<2->{ 
+   				 \item A characterization of the deep Web's contentent
+   	%			 }
+   	\item Initial enumeration of the difficulties for retrieving deep web content 
+  			\end{itemize}
+\end{block}
+\end{frame}
+\subsection{Quantification of the deep web}
+\begin{frame}[fragile]{Quantification of the deep web}
+To quantify the deep web a pool of 53,220 urls was used \\  
+ 43,348 retrieved and 700 were randomly selected \\
+$13.6\% \approx 100$ were found not to be search sites i.e. Google like
+but provided a lower bounds size estimation by content overlap
+\begin{figure}
+			\includegraphics[height=3cm]{overlapAnalysis.png}
+			\caption{Remember Lecture 1 WebSci}
+	\end{figure}
+\end{frame}
+\begin{frame}[fragile]{Quantification of the deep web}
+Another 100 random sites were chosen for content analysis \\
+The html documents (records) per site was retrieved  \\
+Mean size of 13.7KB, median 19.7KB  \\
+Mean \#documents of 5.43 million, median 4.95 thousand \\
+From this they estimated > 200,000 total deep web sites \\
+For a total of 543 billion documents 
+\begin{figure}
+			\includegraphics[height=4cm]{inferedDWRecSize.png}
+			\caption{ \footnotesize{Inferred Distribution of Record Size}}
+	\end{figure}
+\end{frame}
+\begin{frame}[fragile]{Quantification of the deep web}
+Along with the documents the databases were retrieved \\
+Mean size 74.4 MB with median of 169 KB \\
+Estimated total database size of 7.44 petabytes \\
+Compared to 18.7 terabytes of the surface web at the time \\
+60 deep web sites had already known database size \\
+totaling 750 terabytes \\
+\begin{figure}
+			\includegraphics[height=4cm]{tdbSize.png}
+			\caption{\footnotesize{Inferred Distribution of Database  Size}}
+\end{figure}
 
 \end{frame}
-\section{Usage}
-\subsection{...}
-\subsection{...}
-\section{Examples}
-\subsection{...}
+\subsection{Characterization of the deep web}
+\begin{frame}[fragile]{Characterization of the deep web}
+\begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+	Revisiting the initial 43,348 urls \\
+	17,000 sites were selected \\ 
+	For subject and content analysis \\
+	It was found that they  \\
+	contained an uniform subject \\
+	distribution  \\
+	\column{0.5\textwidth}
+  		\begin{figure}
+			\includegraphics[height=8cm]{dwsubj.png}
+		\end{figure}
+  \end{columns}
 
-\begin{frame}
+\end{frame}
+\begin{frame}[fragile]{Characterization of the deep web}
+Topical databases, internal site documents and archived publications make up 80\% of all deep web sites\\
+E-commerce along with auction and classified sites 10\% \\
+Remaining sites 10\% 
+\begin{figure}
+			\includegraphics[width=6cm]{dwct.png}
+		\end{figure}
+\end{frame}
+\subsection{Difficulties in retrieving deep web content }
+\begin{frame}[fragile]{Difficulties in retrieving deep web content }
+\begin{block}{Database Content Retrieval Used In Study}
+Directed queries are necessary 
+using 21m terms, 430k unique \\
+For each new database 430k queries are needed \\
+To get all of their contents \\
+An infeasible task at scale
+\end{block}
+
+\end{frame}
+\begin{frame}[fragile]{Difficulties in retrieving deep web content }
+\begin{block}{Search Engines Use Breath Crawls}
+The query  \emph{URL:dmoz.org} was made to four major search engines \\
+Dmoz or Open Directory had at the time subject structure of 248k categories \\
+The search engines returned only a small percentage of expected results
+\end{block}
+\begin{figure}
+			\includegraphics[width=6cm]{dwII.png}
+		\end{figure}
+\end{frame}
+\begin{frame}[fragile]{Difficulties in retrieving deep web content }
+Leaving the question of how to effectively access the contents of the deep 
+web databases and crawl sites in order to find links to the deeper content open
+\end{frame}
+\section{Searching for Hidden-Web Databases}
+\subsection{Contribution}
+\begin{frame}{ Barbosa \&  Freire's Contribution}
+New Crawling Strategy to automatically discover hidden-web databases
+\end{frame}
+
+\begin{frame}{ Form-Focused Crawler}
 \end{frame} % to enforce entries in the table of contents
 
 \end{document}
