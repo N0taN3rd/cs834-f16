@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+import os
 import hashlib
 import re
 from math import floor

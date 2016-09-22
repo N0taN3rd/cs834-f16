@@ -41,6 +41,32 @@
  left=20mm,
  top=20mm,
 }
+
+\definecolor{lightgray}{rgb}{.7,.7,.7}
+\definecolor{gray}{rgb}{.4,.4,.4}
+\definecolor{darkblue}{rgb}{0,0,.3}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+
+\lstset{
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  showstringspaces=false,
+  commentstyle=\color{gray}\upshape
+}
+
+\lstdefinelanguage{XML}
+{
+  morestring=[b]",
+  morestring=[s]{>}{<},
+  morecomment=[s]{<?}{?>},
+  stringstyle=\color{black},
+  identifierstyle=\color{darkblue},
+  keywordstyle=\color{cyan},
+  morekeywords={xmlns,version,type}% list your attributes here
+}
+ 
  
 \hypersetup{
     colorlinks,
@@ -207,8 +233,67 @@ fied time in the sitemap, and to help estimate the change frequency.
 \end{verbatim}
 \subsection{Answer}
 \setcounter{listing}{0}
-The code for this question can be seen in the source code listing \hyperref[code:sitemap]{\ref{code:sitemap}}. The programs utilizes three libraries which made this question easy: PyFilesystem \cite{pyfs} for its combination of listing the contents of a directory and file stats in a single function call, Arrow \cite{arrow} the python version of Momentjs and Yattag\cite{yattag} pythonic document creation. Using pythons argument parser library to get the directory for which to create the sitemap, the program lists the contents of the directory and if the name of the file is acceptable, determined by ``-dots" (include . files or not) argument create a new xml node were the last modified time is converted into utc and finally after the files of the direct have been read output the created site to stdout. 
-
+The code for this question can be seen in the source code listing \hyperref[code:sitemap]{\ref{code:sitemap}}. The programs utilizes three libraries which made this question easy: PyFilesystem \cite{pyfs} for its combination of listing the contents of a directory and file stats in a single function call, Arrow \cite{arrow} the python version of Momentjs and Yattag\cite{yattag} pythonic document creation. Using pythons argument parser library to get the directory for which to create the sitemap, the program lists the contents of the directory and if the name of the file is acceptable, determined by ``-dots" (include . files or not) argument create a new xml node were the last modified time is converted into utc and finally after the files of the direct have been read output the created site to stdout.  \autoref{sitemap} shows the output of code listing \hyperref[code:sitemap]{\ref{code:sitemap}} when run on a directory containing the wiki for WAIL.
+\begin{lstlisting}[language=xml, frame=single, caption={Sitemap of the Wiki for WAIL}, label=sitemap]
+<urlSet xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://www.example.com/Using+Wail.md</loc>
+    <lastmod>2016-08-03T03:32:46.439265+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/Home.md</loc>
+    <lastmod>2016-08-03T03:10:43.711074+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/Getting+Started.md</loc>
+    <lastmod>2016-08-03T03:38:06.393983+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/Screen-Shots.md</loc>
+    <lastmod>2016-08-03T00:59:45.379063+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/FAQ.md</loc>
+    <lastmod>2016-08-03T00:59:45.379063+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/images/misc.png</loc>
+    <lastmod>2016-08-02T18:40:20+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/images/wailSideBar.png</loc>
+    <lastmod>2016-08-02T18:38:14+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/images/services.png</loc>
+    <lastmod>2016-08-02T18:40:04+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/images/frontpage.png</loc>
+    <lastmod>2016-08-02T18:38:48+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/images/heritrixRunningCrawlOptions.png</loc>
+    <lastmod>2016-08-02T18:41:04+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/images/wayback.png</loc>
+    <lastmod>2016-08-02T18:39:04+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/images/configureNewCrawl.png</loc>
+    <lastmod>2016-08-02T18:39:44+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/images/heritrix.png</loc>
+    <lastmod>2016-08-02T18:39:22+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.example.com/images/settings.png</loc>
+    <lastmod>2016-08-02T18:40:44+00:00</lastmod>
+  </url>
+</urlSet>
+\end{lstlisting}
 \begin{code}
 	\pycode{code/siteMap.py}
 	\captionof{listing}{Python Directory Sitemap Generation} \label{code:sitemap}
@@ -255,27 +340,7 @@ In order to answer this question I used six files with following naming scheme: 
 \noindent
 The hashing function used for the words or tokens as I refer to them in \autoref{code:simhash} is md5. Md5 is used as it has the property of given an input it will produce the same hash on consecutive usage of the function on the same input. Before calculation of the hash for each token the documents text was sanitized by removing the punctuation and tokens that were found to be in a stop word list provided by \textit{NLTK} \cite{nltk} or less than two characters long. For all tokens that passed the filtering criteria their weights were calculated as the frequency in which they appeared, for example if a token appeared in the document twice it was assigned the the weight of two. After the token weights were calculated each of the tokens were hashed. Md5 in python can return the digest of the hash in two forms: the digest itself or an hexadecimal representation of the digest. The hex digest was used as it is the quickest to transform into a binary string. The conversion from hex to binary is as follows: for each character in the hexadecimal representation of the digest, determine its ordinal value and represent it as a binary value.\newline
 
-\noindent 
-Bit length in this program, which is used in calculating the fingerprint of a document $D$, is one of three choices: a user given argument, the minimum md5 hash length in binary representation out of all produced hashes or taking the floor of a random value from an uniform distribution whose bounds are given as arguments to this program. The fingerprint calculation function $FP$ used by this program is defined as follows \newline
-\begin{equation}
-\label{eq:fp}
- \displaystyle FP(D) = \bigcup_{i=1}^{b} f(tv,tw,i)
-\end{equation}
-\autoref{eq:fp}'s terms are defined as follows$:$  $b$ is the number of bits considered in the calculation, $i$ is the  $i^{th}$ index of a terms bit vector $V$,  $tv$ is the set of all bit vectors of the terms contained in $D$ likewise $tw$ is the set of all term weights in the document $D$. The function $f$ is defined as follows  \newline
-\begin{equation} 
-\label{eq:fpf}
-\displaystyle f(tv,tw,i) =\sum_{\substack{
-	j \\
- \ v_j \in tv \\ \ w_j \in tw
-}}^{n} v_j[i] * w_j  = 
-\begin{cases}
- 1 & \text{if} \sum_{j}^{n} v_j[i] * w_j \ \text{is positive} \\
- 0 & \text{if} \sum_{j}^{n} v_j[i] * w_j \ \text{is negative} \\
-\end{cases}
-\end{equation}
-\autoref{eq:fpf}'s terms are defined as follows$:$ $j$ is index in the set of size $n$ bit vectors $tv$ and weights $tw$. likewise it follows that $v_j$ and $w_j$ are the $j^{th}$ terms bit vector and weight. The term $i$ maintains the same definition as defined in \autoref{eq:fp}. \autoref{eq:fp} is the method \emph{file\_fingerprint} and \autoref{eq:fpf} is the method \emph{gen\_ith\_of\_v} found in \autoref{code:simhash} which implements the simhash algorithm. 
-\newpage
-\clearpage
+\noindent
 Three cases were used to test the effectiveness of this implementation of simhash. The first used a bit length of 8  which was used in the example found in the book \citep[pp. 64]{CroftMetzlerStrohman200902} as a base line. The results \autoref{fig:shb8} show that simhash was able to determine the duplicates syllabus\_same.txt, syllabus.txt and websci\_assignemnt9.tex, websci\_assignemnt9\_same.tex  both of which had similarity scores of $1.0$. The duplicates in this test when compared to the ``same" files both had scores of  $0.8944$. This seems odd but will be explained in the next test.
 \begin{figure}[h]
 \centering
@@ -302,7 +367,7 @@ As seen in table one the lengths of the hash can get large. Which in turns leads
 	\includegraphics[scale=0.6]{simhashMD5.png}
 	\caption{Simhash simularity using min md5 length} \label{fig:shmd5}
 \end{figure}\newline
-As seen in \autoref{fig:shmd5} the minimum hash length is close to for both document types $196$ syllabus and $197$ websci but the similarities for the non-similar files are more distance at $0.8327$ and $0.8113$ respectively. This confirms the assumption that the significant digits of the hash do not play as great of a role for large hash lengths.\newpage
+The minimum hash length is close to for both document types $196$ syllabus and $197$ websci but the similarities for the non-similar files are more distance at $0.8327$ and $0.8113$ respectively. This confirms the assumption that the significant digits of the hash do not play as great of a role for large hash lengths.\newpage
 \noindent
 The final test uses the random value generated as describe previously with lower bounds of $10$ and upper bound of $20$, the results are seen in \autoref{fig:shrandy}. Once again the significant bits come into play with the similarity between non-similar files. The syllabus files were the only group to have the distinction made for different files with score of $0.875$ whereas the websci files no difference could be determined.
 \begin{figure}[h]

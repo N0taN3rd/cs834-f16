@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from urllib.parse import quote_plus as quote
 from argparse import ArgumentParser
 from arrow import Arrow
@@ -13,7 +12,7 @@ def accept(name, moreDots=dots):
     if moreDots:
         return True
     else:
-        return name[0] != '.'
+        return not name.startswith('.')
 
 
 if __name__ == '__main__':
@@ -24,7 +23,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
     dir = OSFS(args.directory)
     dots = args.dots
-    urlSet = []
+    dirs = []
+    skipFirst = True
     doc, tag, text = Doc().tagtext()
     with tag('urlSet', xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"):
         for name, stats in dir.listdirinfo(files_only=True):
@@ -34,10 +34,24 @@ if __name__ == '__main__':
                         text('http://www.example.com/%s' % quote(name))
                     with tag('lastmod'):
                         text(str(Arrow.utcfromtimestamp(stats['modified_time'].timestamp())))
+        for aDir in dir.walkdirs():
+            if skipFirst:
+                skipFirst = False
+                continue
+            if accept(aDir[1:None]):
+                for name, stats in dir.listdirinfo(path=aDir, files_only=True):
+                    if accept(name):
+                        with tag('url'):
+                            with tag('loc'):
+                                text('http://www.example.com%s/%s' %(aDir,quote(name)))
+                            with tag('lastmod'):
+                                text(str(Arrow.utcfromtimestamp(stats['modified_time'].timestamp())))
+
+
     dir.close()
     result = indent(
         doc.getvalue(),
-        indentation=' ' * 4,
+        indentation=' ' * 2,
         newline='\r\n'
     )
 
