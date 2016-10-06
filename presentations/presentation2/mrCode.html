@@ -1,0 +1,76 @@
+<pre style='color:#000000;background:#ffffff;'>include <span style='color:#800000; '>"</span><span style='color:#0000e6; '>mapreduce/mapreduce.h</span><span style='color:#800000; '>"</span>
+
+<span style='color:#696969; '>// User’s map function</span>
+<span style='color:#800000; font-weight:bold; '>class</span> WordCounter <span style='color:#800080; '>:</span> <span style='color:#800000; font-weight:bold; '>public</span> Mapper <span style='color:#800080; '>{</span>
+<span style='color:#800000; font-weight:bold; '>public</span><span style='color:#e34adc; '>:</span>
+  <span style='color:#800000; font-weight:bold; '>virtual</span> <span style='color:#800000; font-weight:bold; '>void</span> Map<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>const</span> MapInput<span style='color:#808030; '>&amp;</span> input<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+    <span style='color:#800000; font-weight:bold; '>const</span> <span style='color:#603000; '>string</span><span style='color:#808030; '>&amp;</span> text <span style='color:#808030; '>=</span> input<span style='color:#808030; '>.</span>value<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>const</span> <span style='color:#800000; font-weight:bold; '>int</span> n <span style='color:#808030; '>=</span> text<span style='color:#808030; '>.</span>size<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>for</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>int</span> i <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#800080; '>;</span> i <span style='color:#808030; '>&lt;</span> n<span style='color:#800080; '>;</span> <span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+      <span style='color:#696969; '>// Skip past leading whitespace</span>
+      <span style='color:#800000; font-weight:bold; '>while</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>i <span style='color:#808030; '>&lt;</span> n<span style='color:#808030; '>)</span> <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span> <span style='color:#603000; '>isspace</span><span style='color:#808030; '>(</span>text<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+        i<span style='color:#808030; '>+</span><span style='color:#808030; '>+</span><span style='color:#800080; '>;</span>
+      <span style='color:#696969; '>// Find word end</span>
+      <span style='color:#800000; font-weight:bold; '>int</span> start <span style='color:#808030; '>=</span> i<span style='color:#800080; '>;</span>
+      <span style='color:#800000; font-weight:bold; '>while</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>i <span style='color:#808030; '>&lt;</span> n<span style='color:#808030; '>)</span> <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span> <span style='color:#808030; '>!</span><span style='color:#603000; '>isspace</span><span style='color:#808030; '>(</span>text<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+        i<span style='color:#808030; '>+</span><span style='color:#808030; '>+</span><span style='color:#800080; '>;</span>
+      <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>start <span style='color:#808030; '>&lt;</span> i<span style='color:#808030; '>)</span>
+        Emit<span style='color:#808030; '>(</span>text<span style='color:#808030; '>.</span>substr<span style='color:#808030; '>(</span>start<span style='color:#808030; '>,</span>i<span style='color:#808030; '>-</span>start<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>1</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+  <span style='color:#800080; '>}</span>
+<span style='color:#800080; '>}</span><span style='color:#800080; '>;</span>
+REGISTER_MAPPER<span style='color:#808030; '>(</span>WordCounter<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+<span style='color:#696969; '>// User’s reduce function</span>
+<span style='color:#800000; font-weight:bold; '>class</span> Adder <span style='color:#800080; '>:</span> <span style='color:#800000; font-weight:bold; '>public</span> Reducer <span style='color:#800080; '>{</span>
+  <span style='color:#800000; font-weight:bold; '>virtual</span> <span style='color:#800000; font-weight:bold; '>void</span> Reduce<span style='color:#808030; '>(</span>ReduceInput<span style='color:#808030; '>*</span> input<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Iterate over all entries with the</span>
+    <span style='color:#696969; '>// same key and add the values</span>
+    int64 value <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>while</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>!</span>input<span style='color:#808030; '>-</span><span style='color:#808030; '>></span>done<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+      value <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> StringToInt<span style='color:#808030; '>(</span>input<span style='color:#808030; '>-</span><span style='color:#808030; '>></span>value<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+      input<span style='color:#808030; '>-</span><span style='color:#808030; '>></span>NextValue<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#696969; '>// Emit sum for input->key()</span>
+    Emit<span style='color:#808030; '>(</span>IntToString<span style='color:#808030; '>(</span>value<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+  <span style='color:#800080; '>}</span>
+<span style='color:#800080; '>}</span><span style='color:#800080; '>;</span>
+REGISTER_REDUCER<span style='color:#808030; '>(</span>Adder<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+<span style='color:#800000; font-weight:bold; '>int</span> <span style='color:#400000; '>main</span><span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>int</span> argc<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>char</span><span style='color:#808030; '>*</span><span style='color:#808030; '>*</span> argv<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+  ParseCommandLineFlags<span style='color:#808030; '>(</span>argc<span style='color:#808030; '>,</span> argv<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+  MapReduceSpecification spec<span style='color:#800080; '>;</span>
+  <span style='color:#696969; '>// Store list of input files into "spec"</span>
+  <span style='color:#800000; font-weight:bold; '>for</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>int</span> i <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#800080; '>;</span> i <span style='color:#808030; '>&lt;</span> argc<span style='color:#800080; '>;</span> i<span style='color:#808030; '>+</span><span style='color:#808030; '>+</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+    MapReduceInput<span style='color:#808030; '>*</span> input <span style='color:#808030; '>=</span> spec<span style='color:#808030; '>.</span>add_input<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    input<span style='color:#808030; '>-</span><span style='color:#808030; '>></span>set_format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>text</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    input<span style='color:#808030; '>-</span><span style='color:#808030; '>></span>set_filepattern<span style='color:#808030; '>(</span>argv<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    input<span style='color:#808030; '>-</span><span style='color:#808030; '>></span>set_mapper_class<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>WordCounter</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+  <span style='color:#800080; '>}</span>
+  <span style='color:#696969; '>// Specify the output files:</span>
+  <span style='color:#696969; '>// /gfs/test/freq-00000-of-00100</span>
+  <span style='color:#696969; '>// /gfs/test/freq-00001-of-00100</span>
+  <span style='color:#696969; '>// ...</span>
+  MapReduceOutput<span style='color:#808030; '>*</span> out <span style='color:#808030; '>=</span> spec<span style='color:#808030; '>.</span>output<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+  out<span style='color:#808030; '>-</span><span style='color:#808030; '>></span>set_filebase<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>/gfs/test/freq</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+  out<span style='color:#808030; '>-</span><span style='color:#808030; '>></span>set_num_tasks<span style='color:#808030; '>(</span><span style='color:#008c00; '>100</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+  out<span style='color:#808030; '>-</span><span style='color:#808030; '>></span>set_format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>text</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+  out<span style='color:#808030; '>-</span><span style='color:#808030; '>></span>set_reducer_class<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Adder</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+  <span style='color:#696969; '>// Optional: do partial sums within map</span>
+  <span style='color:#696969; '>// tasks to save network bandwidth</span>
+  out<span style='color:#808030; '>-</span><span style='color:#808030; '>></span>set_combiner_class<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Adder</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+  <span style='color:#696969; '>// Tuning parameters: use at most 2000</span>
+  <span style='color:#696969; '>// machines and 100 MB of memory per task</span>
+  spec<span style='color:#808030; '>.</span>set_machines<span style='color:#808030; '>(</span><span style='color:#008c00; '>2000</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+  spec<span style='color:#808030; '>.</span>set_map_megabytes<span style='color:#808030; '>(</span><span style='color:#008c00; '>100</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+  spec<span style='color:#808030; '>.</span>set_reduce_megabytes<span style='color:#808030; '>(</span><span style='color:#008c00; '>100</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+  <span style='color:#696969; '>// Now run it</span>
+  MapReduceResult result<span style='color:#800080; '>;</span>
+  <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>!</span>MapReduce<span style='color:#808030; '>(</span>spec<span style='color:#808030; '>,</span> <span style='color:#808030; '>&amp;</span>result<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span> <span style='color:#603000; '>abort</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+  <span style='color:#696969; '>// Done: ’result’ structure contains info</span>
+  <span style='color:#696969; '>// about counters, time taken, number of</span>
+  <span style='color:#696969; '>// machines used, etc.</span>
+  <span style='color:#800000; font-weight:bold; '>return</span> <span style='color:#008c00; '>0</span><span style='color:#800080; '>;</span>
+<span style='color:#800080; '>}</span>
+</pre>

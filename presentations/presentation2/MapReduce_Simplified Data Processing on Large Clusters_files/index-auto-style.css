@@ -1,0 +1,52 @@
+body {
+  font-family: Helvetica, sans serif;
+  font-size: 180%;
+  background: white;
+  color: black;
+  padding-left: 1in;
+  padding-right: 0.1in;
+  padding-top: 0.0in;
+  padding-bottom: 0.0in;
+}
+
+table {
+  font-family: Helvetica, sans serif;
+  font-size: 80%;
+}
+
+table.headrow {
+  font-family: Helvetica, sans serif;
+  font-size: 80%;
+  margin-left: -0.5in;
+}
+
+h1 { margin-left: -0.5in; margin-top: 0.1in; border-style: none; 
+     font-size: 120%; }
+h2 { margin-left: -0.1in; }
+h3 { margin-left: 0in; }
+hr { margin-left: -0.5in; margin-right: -0.5in; }
+ul li {
+  list-style-type: square;
+  padding: 0.1in 0 0.1in 0;
+  margin:  -0.1in 0 -0.1in 0;
+  border:  0 0 0 0;
+}
+ul li li { list-style-type: circle }
+
+address { text-align: right; }
+code, pre, samp, var { color: #0000f0; }
+pre {
+  font-size: 80%;
+  line-height: 1.3em;
+  padding: 0.4em 0 0.4em 0;
+  margin:  0 0 0 0;
+  border:  0 0 0 0;
+}
+kbd { color: #600000; }
+
+p {
+  margin: 0.5em 0 0.5em 0;
+  padding: 0 0 0 0;
+}
+
+/* body:after { content: "Google Confidential"; } */
