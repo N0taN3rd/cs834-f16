@@ -30,7 +30,7 @@ ggplot(sd, aes(x,y)) +
   scale_colour_brewer('P=',palette='Dark2') +
   labs(title='Skip Distance P=1000 & P=10000',x = 'C Values', y = 'Function Values')
 
-ggsave('skipDistanceBoth.pdf')
+ggsave('skipDistanceBoth.png')
  
 skip_distanceD <- function(c) {(1000/2) - ((4 * 1000000)/c^2)}
 skip_distanceD2 <- function(c) {(10000/2) - ((4 * 1000000)/c^2)}
@@ -67,7 +67,7 @@ ggplot(skipD, aes(x,y)) +
                   force = 1,
                   max.iter = 2e3) +
   labs(title='Skip Distance Derivative P=1000',x = 'C Values', y = 'Derivative Function Values')
-ggsave('skipDistanceD.pdf')
+ggsave('skipDistanceD.png')
 ggplot(skipD2, aes(x,y)) +
   geom_point( data=skd_oc2,colour =colors[2]) +
   geom_line(colour =colors[2]) +
@@ -82,7 +82,7 @@ ggplot(skipD2, aes(x,y)) +
                   force = 1,
                   max.iter = 2e3) +
   labs(title='Skip Distance Derivative P=10000',x = 'C Values', y = 'Derivative Function Values')
-ggsave('skipDistanceD2.pdf')
+ggsave('skipDistanceD2.png')
 
 
 

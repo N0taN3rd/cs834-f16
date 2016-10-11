@@ -19,21 +19,21 @@ small <- function() {
     scale_x_continuous(breaks =c(1,1e+06,2e+06,3e+06,4e+06,4.5e+06),labels = comma) +
     scale_y_continuous(breaks = c(1,50000,100000,150000,200000,250000),labels = comma) +
     labs(title='Vocabulary Growth Wiki Small',x = 'Word Count', y = 'Vocab Count')
-  ggsave('wikiSmallVG.pdf')
+  ggsave('wikiSmallVG.png')
   ggplot(wsvb,aes(x = wc, y = vc)) + 
     geom_line(color=colors[1]) + 
     geom_line(data=data.frame(x=wsvb$wc,y=predict(wsvBNLS)),aes(x,y),color=colors[2]) + 
     scale_x_continuous(breaks =c(1,1e+06,2e+06,3e+06,4e+06,4.5e+06),labels = comma) +
     scale_y_continuous(breaks = c(1,50000,100000,150000,200000,250000),labels = comma) +
     labs(title='Vocabulary Growth Wiki Small Backwards',x = 'Word Count', y = 'Vocab Count')
-  ggsave('wikiSmallVGB.pdf')
+  ggsave('wikiSmallVGB.png')
   ggplot(wsvr,aes(x = wc, y = vc)) + 
     geom_line(color=colors[1]) + 
     geom_line(data=data.frame(x=wsvr$wc,y=predict(wsvRNLS)),aes(x,y),color=colors[2]) + 
     scale_x_continuous(breaks =c(1,1e+06,2e+06,3e+06,4e+06,4.5e+06),labels = comma) +
     scale_y_continuous(breaks = c(1,50000,100000,150000,200000,250000),labels = comma) +
     labs(title='Vocabulary Growth Wiki Small Random',x = 'Word Count', y = 'Vocab Count')
-  ggsave('wikiSmallVR.pdf')
+  ggsave('wikiSmallVR.png')
 }
 
 large <- function() {
@@ -51,21 +51,21 @@ large <- function() {
     scale_x_continuous(breaks =c(1,2e+07, 4e+07, 6e+07,  9e+07),labels = comma) +
     scale_y_continuous(breaks = c(1,200000,  400000,  600000,  800000, 1000000, 1200000, 1400000, 1650000),labels = comma) +
     labs(title='Vocabulary Growth Wiki Large',x = 'Word Count', y = 'Vocab Count')
-  ggsave('wikiLargeVG.pdf')
+  ggsave('wikiLargeVG.png')
   ggplot(wsvb,aes(x = wc, y = vc)) +
     geom_line(color=colors[1]) +
     geom_line(data=data.frame(x=wsvb$wc,y=predict(wsvBNLS)),aes(x,y),color=colors[2]) +
     scale_x_continuous(breaks =c(1,2e+07, 4e+07, 6e+07,  9e+07),labels = comma) +
     scale_y_continuous(breaks = c(1,200000,  400000,  600000,  800000, 1000000, 1200000, 1400000, 1650000),labels = comma) +
     labs(title='Vocabulary Growth Wiki Large Backwards',x = 'Word Count', y = 'Vocab Count')
-  ggsave('wikiLargeVGB.pdf')
+  ggsave('wikiLargeVGB.png')
   ggplot(wsvr,aes(x = wc, y = vc)) +
     geom_line(color=colors[1]) +
     geom_line(data=data.frame(x=wsvr$wc,y=predict(wsvRNLS)),aes(x,y),color=colors[2]) +
     scale_x_continuous(breaks =c(1,2e+07, 4e+07, 6e+07,  9e+07),labels = comma) +
     scale_y_continuous(breaks = c(1,200000,  400000,  600000,  800000, 1000000, 1200000, 1400000, 1650000),labels = comma) +
     labs(title='Vocabulary Growth Wiki Large Random',x = 'Word Count', y = 'Vocab Count')
-  ggsave('wikiLargeVGR.pdf')
+  ggsave('wikiLargeVGR.png')
 }
 
 small()
