@@ -13,7 +13,6 @@ small <- function() {
   wsvNLS <- nls(vc ~ K * wc ^ B,data = wsv)
   wsvBNLS <- nls(vc ~ K * wc ^ B,data = wsvb)
   wsvRNLS <- nls(vc ~ K * wc ^ B,data = wsvr)
-  # breaks used were modified from pretty(wsv$(wc|vc),n=6)
   ggplot(wsv,aes(x = wc, y = vc)) + 
     geom_line(color=colors[1]) + 
     geom_line(data=data.frame(x=wsv$wc,y=predict(wsvNLS)),aes(x,y),color=colors[2]) + 
@@ -46,7 +45,6 @@ large <- function() {
   wsvNLS <- nls(vc ~ K * wc ^ B,data = wsv)
   wsvBNLS <- nls(vc ~ K * wc ^ B,data = wsvb)
   wsvRNLS <- nls(vc ~ K * wc ^ B,data = wsvr)
-  # # breaks used were modified from pretty(wsv$(wc|vc),n=6)
   ggplot(wsv,aes(x = wc, y = vc)) +
     geom_line(color=colors[1]) +
     geom_line(data=data.frame(x=wsv$wc,y=predict(wsvNLS)),aes(x,y),color=colors[2]) +

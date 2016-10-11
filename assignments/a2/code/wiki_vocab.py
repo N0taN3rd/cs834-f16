@@ -69,6 +69,18 @@ def vocab_random(wfile, outfile):
                         vout.write(out)
 
 
-if __name__ == '__main__':
+def vocab_small():
+    vocab(wsmall2, 'output_files/wsmall-vocab.csv')
+    vocab_backwards(wsmall2, 'output_files/wsmall-vocabB.csv')
+    vocab_random(wsmall2, 'output_files/wsmall-vocabR.csv')
+
+
+def vocab_large():
+    vocab(wlarge2, 'output_files/wlarge-vocab.csv')
     vocab_backwards(wlarge2, 'output_files/wlarge-vocabB.csv')
     vocab_random(wlarge2, 'output_files/wlarge-vocabR.csv')
+
+
+if __name__ == '__main__':
+    vocab_small()
+    vocab_large()

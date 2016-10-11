@@ -1,5 +1,4 @@
 import re
-import networkx as nx
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
 from util import *
@@ -58,31 +57,6 @@ def get_edge_out3(wfile, wfile_set):
     return self_link, local_urls
 
 
-def build_wlarge_edges():
-    large_list, large_set = read_pickle(wlarge2)
-    sl = []
-    c = 0
-    for wiki_file in large_list:
-        c += 1
-        self_link, out_links = get_edge_out(wiki_file, large_set)
-        sl.append((self_link, out_links))
-    dump_pickle(sl, wlarge_edges)
-
-
-def wikil_soup():
-    pair_soup = []
-    c = 0
-    large_list, large_set = read_pickle(wlarge2)
-    for wiki_file in large_list:
-        c += 1
-        with open(wiki_file, 'r') as wIn:
-            wSoup = BeautifulSoup(wIn.read(), 'lxml')
-            pair_soup.append((wiki_file, str(wSoup)))
-        if c % 1000 == 0:
-            print(wiki_file)
-    dump_pickle(pair_soup, 'pickled/wiki-large-soup.pickle')
-
-
 def wiki_pagerank(w_list, w_set, edge_dump, graph_dump, edge_getter=get_edge_out):
     graph = nx.DiGraph()
     edge_list = []
@@ -126,12 +100,5 @@ def wiki_large_pr():
 
 
 if __name__ == '__main__':
-    edges = read_pickle(wlarge_edges)  # type: list[tuple[str, list[tuple[str,str]]]]
-    with open('output_files/wlarge-nodEeges.csv','w+') as neOut:
-        neOut.write('node,edge\n')
-        for n,e in edges:
-            if len(e) == 0:
-                neOut.write('%s,\n'%n)
-            else:
-                for nn,ee in e:
-                    neOut.write('%s,%s\n' % (nn,ee))
+    wiki_small_pr()
+    wiki_large_pr()

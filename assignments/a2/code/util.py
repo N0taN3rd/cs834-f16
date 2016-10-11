@@ -1,5 +1,5 @@
 import pickle
-import networkx as nx
+from fs.osfs import OSFS
 
 wlarge = 'pickled/wiki-large.pickle'
 wlarge2 = 'pickled/wiki-large2.pickle'
@@ -34,30 +34,25 @@ def read_pickle(name):
         return pickle.load(input_file)
 
 
-def small():
-    edges = read_pickle(wsmall_edges)  # type: list[tuple[str, list[tuple[str,str]]]]
-    graph = nx.DiGraph()
-    for n, e in edges:
-        graph.add_node(n)
-    for n, e in edges:
-        if len(e) == 0:
-            continue
-        else:
-            for nn, ee in e:
-                graph.add_edge(nn, ee)
+def pick_file_list():
+    wl = OSFS('wiki-large')
+    large_list = []
+    large_set = set()
+    for file in wl.walkfiles():
+        large_list.append('wiki-large%s' % file)
+        large_set.add(file[file.rfind('/') + 1:])
+    dump_pickle((large_list, large_set), 'pickled/wiki-large2.pickle')
+    wl.close()
 
-    # for n in graph.nodes():
-    #     print(graph.in_edges(n))
-    print(graph.number_of_nodes())
+    ws = OSFS('wiki-small')
+    small_list = []
+    small_set = set()
+    for file in ws.walkfiles():
+        small_list.append('wiki-small%s' % file)
+        small_set.add(file[file.rfind('/') + 1:])
+    dump_pickle((small_list, small_set), 'pickled/wiki-small2.pickle')
+    ws.close()
+
 
 if __name__ == '__main__':
-    small()
-    graph, pagerank = read_pickle('pickled/wiki-small-graph.pickle')  # type: tuple[nx.DiGraph, dict]
-    inlinks = []
-    for n in graph.nodes():
-        ins = graph.in_edges(n)
-        if len(ins) > 0:
-            inlinks.append((n,ins))
-    print(len(inlinks))
-
-
+    pick_file_list()
