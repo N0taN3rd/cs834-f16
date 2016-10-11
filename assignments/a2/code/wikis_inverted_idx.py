@@ -15,7 +15,7 @@ def build_inverted_idx_small():
     for wf in w_list:
         fname = wf[wf.rfind('/') + 1:]
         with open(wf, 'r') as wIn:
-            wSoup = BeautifulSoup(wIn.read(), 'html5lib')
+            wSoup = BeautifulSoup(wIn.read(), 'lxml')
             for token in toke.tokenize(no_wspace_punk.sub(' ', wSoup.text)):
                 lt = token.lower()
                 inverted_index[lt].add(fname)

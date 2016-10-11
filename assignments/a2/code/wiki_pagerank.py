@@ -108,7 +108,8 @@ def prout(wname):
                 prOut.write('%s,%.5f\n' % (k, v))
 
 
-def wiki_smal_pr():
+def wiki_small_pr():
+    print('pr small')
     w_list, w_set = read_pickle(wsmall2)
     wiki_pagerank(w_list, w_set, wsmall_edges, wsmall_graph, get_edge_out)
     wiki_pagerank(w_list, w_set, wsmall_edges2, wsmall_graph2, get_edge_out2)
@@ -123,5 +124,14 @@ def wiki_large_pr():
     wiki_pagerank(w_list, w_set, wlarge_edges3, wlarge_graph3, get_edge_out3)
     prout('large')
 
+
 if __name__ == '__main__':
-    wiki_large_pr()
+    edges = read_pickle(wlarge_edges)  # type: list[tuple[str, list[tuple[str,str]]]]
+    with open('output_files/wlarge-nodEeges.csv','w+') as neOut:
+        neOut.write('node,edge\n')
+        for n,e in edges:
+            if len(e) == 0:
+                neOut.write('%s,\n'%n)
+            else:
+                for nn,ee in e:
+                    neOut.write('%s,%s\n' % (nn,ee))

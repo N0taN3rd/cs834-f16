@@ -1,20 +1,21 @@
 import re
 import random
 from string import punctuation
-from util import wsmall2, read_pickle, dump_pickle
+from util import wsmall2, wlarge2, read_pickle, dump_pickle
 from bs4 import BeautifulSoup
 from nltk.tokenize import TreebankWordTokenizer
 
 no_wspace_punk = re.compile('(?:\s+)|[%s]' % re.escape(punctuation))
 
 
-def vocab():
-    w_list, w_set = read_pickle(wsmall2)
+def vocab(wfile, outfile):
+    w_list, w_set = read_pickle(wfile)
     toke = TreebankWordTokenizer()
     vocab = set()
     vocab_count = 0
     word_count = 0
-    with open('output_files/wsmal-vocab.txt', 'w+') as vout:
+    with open(outfile, 'w+') as vout:
+        vout.write('wc,vc\n')
         for wf in w_list:
             with open(wf, 'r') as wIn:
                 wSoup = BeautifulSoup(wIn.read(), 'lxml')
@@ -23,18 +24,18 @@ def vocab():
                     if token not in vocab:
                         vocab.add(token)
                         vocab_count += 1
-                        out = '%d %d\n' % (word_count, vocab_count)
-                        print(out)
+                        out = '%d,%d\n' % (word_count, vocab_count)
                         vout.write(out)
 
 
-def vocab_backwards():
-    w_list, w_set = read_pickle(wsmall2)
+def vocab_backwards(wfile, outfile):
+    w_list, w_set = read_pickle(wfile)
     toke = TreebankWordTokenizer()
     vocab = set()
     vocab_count = 0
     word_count = 0
-    with open('output_files/wsmal-vocabB.txt', 'w+') as vout:
+    with open(outfile, 'w+') as vout:
+        vout.write('wc,vc\n')
         for wf in reversed(w_list):
             with open(wf, 'r') as wIn:
                 wSoup = BeautifulSoup(wIn.read(), 'lxml')
@@ -43,19 +44,19 @@ def vocab_backwards():
                     if token not in vocab:
                         vocab.add(token)
                         vocab_count += 1
-                        out = '%d %d\n' % (word_count, vocab_count)
-                        print(out)
+                        out = '%d,%d\n' % (word_count, vocab_count)
                         vout.write(out)
 
 
-def vocab_random():
-    w_list, w_set = read_pickle(wsmall2)
+def vocab_random(wfile, outfile):
+    w_list, w_set = read_pickle(wfile)
     random.shuffle(w_list)
     toke = TreebankWordTokenizer()
     vocab = set()
     vocab_count = 0
     word_count = 0
-    with open('output_files/wsmal-vocabR.txt', 'w+') as vout:
+    with open(outfile, 'w+') as vout:
+        vout.write('wc,vc\n')
         for wf in w_list:
             with open(wf, 'r') as wIn:
                 wSoup = BeautifulSoup(wIn.read(), 'lxml')
@@ -64,10 +65,10 @@ def vocab_random():
                     if token not in vocab:
                         vocab.add(token)
                         vocab_count += 1
-                        out = '%d %d\n' % (word_count, vocab_count)
-                        print(out)
+                        out = '%d,%d\n' % (word_count, vocab_count)
                         vout.write(out)
 
 
 if __name__ == '__main__':
-    vocab_random()
+    vocab_backwards(wlarge2, 'output_files/wlarge-vocabB.csv')
+    vocab_random(wlarge2, 'output_files/wlarge-vocabR.csv')
