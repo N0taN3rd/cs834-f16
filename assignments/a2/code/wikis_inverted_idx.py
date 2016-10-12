@@ -1,24 +1,33 @@
 import re
 from collections import defaultdict
-from string import punctuation
 from util import wsmall2, wlarge2, read_pickle, dump_pickle
 from bs4 import BeautifulSoup
-from nltk.tokenize import TreebankWordTokenizer
+from nltk.tokenize import WordPunctTokenizer
 
-no_wspace_punk = re.compile('(?:\s+)|[%s]|•' % re.escape(punctuation))
+no_wspace_punk = re.compile('(?:\s+)|[%s]|•' % re.escape("""!"#$%&()*+,./:;<=>?@[\]^_{|}~"""))
+
+
+def small_inverted_idx_helper():
+    w_list, w_set = read_pickle(wsmall2)
+    toke = WordPunctTokenizer()
+    with open('output_files/wsmall-word-file.txt', 'w+') as out:
+        for wf in w_list:
+            fname = wf[wf.rfind('/') + 1:]
+            with open(wf, 'r') as wIn:
+                wSoup = BeautifulSoup(wIn.read(), 'lxml')
+                for token in toke.tokenize(no_wspace_punk.sub(' ', wSoup.text)):
+                    if len(token) > 1:
+                        lt = token.lower()
+                        out.write('%s %s\n' % (lt, fname))
 
 
 def build_inverted_idx_small():
+    small_inverted_idx_helper()
     inverted_index = defaultdict(set)
-    w_list, w_set = read_pickle(wsmall2)
-    toke = TreebankWordTokenizer()
-    for wf in w_list:
-        fname = wf[wf.rfind('/') + 1:]
-        with open(wf, 'r') as wIn:
-            wSoup = BeautifulSoup(wIn.read(), 'lxml')
-            for token in toke.tokenize(no_wspace_punk.sub(' ', wSoup.text)):
-                lt = token.lower()
-                inverted_index[lt].add(fname)
+    with open('output_files/wsmall-word-file.txt', 'r') as wIn:
+        for line in wIn:
+            sline = line.rstrip().split(' ')
+            inverted_index[sline[0]].add(sline[1])
     dump_pickle(inverted_index, 'pickled/wsmall-inverted-index.pickle')
     with open('output_files/wsmall-inverted-index-count.txt', 'w') as iidx2Out:
         with open('output_files/wsmall-inverted-index.txt', 'w') as iidxOut:
@@ -30,15 +39,16 @@ def build_inverted_idx_small():
 
 def large_inverted_idx_helper():
     w_list, w_set = read_pickle(wlarge2)
-    toke = TreebankWordTokenizer()
+    toke = WordPunctTokenizer()
     with open('output_files/wlarge-word-file.txt', 'w+') as out:
         for wf in w_list:
             fname = wf[wf.rfind('/') + 1:]
             with open(wf, 'r') as wIn:
                 wSoup = BeautifulSoup(wIn.read(), 'lxml')
                 for token in toke.tokenize(no_wspace_punk.sub(' ', wSoup.text)):
-                    lt = token.lower()
-                    out.write('%s %s\n' % (lt, fname))
+                    if len(token) > 1:
+                        lt = token.lower()
+                        out.write('%s %s\n' % (lt, fname))
 
 
 def build_inverted_idx_large():
@@ -48,7 +58,6 @@ def build_inverted_idx_large():
         for line in wIn:
             sline = line.rstrip().split(' ')
             inverted_index[sline[0]].add(sline[1])
-    dump_pickle(inverted_index, 'pickled/wlarge-inverted-index.pickle')
     with open('output_files/large-inverted-index-count.txt', 'w') as iidx2Out:
         with open('output_files/large-inverted-index.txt', 'w') as iidxOut:
             for k, v in sorted(inverted_index.items(), key=lambda idxE: len(idxE[1]), reverse=True):
