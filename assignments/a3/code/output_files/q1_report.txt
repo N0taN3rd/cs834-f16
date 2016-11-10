@@ -1,0 +1,32 @@
+Lancaster
+The new stem classes had 11127 stems in common
+116536 stems not in the new stem classes
+For the stems not in the new stem classes number of words
+Mean: 1  Median: 1 Mode: 1 Max: 2
+For all stem classes cumulative Dice score
+Mean: 0.56  Median: 0.53 Mode: 0.50
+----------------------------------------
+WordNetLemmatizer
+The new stem classes had 5884 stems in common
+158691 stems not in the new stem classes
+For the stems not in the new stem classes number of words
+Mean: 1  Median: 1 Mode: 1 Max: 2
+For all stem classes cumulative Dice score
+Mean: 0.14  Median: 0.09 Mode: 0.50
+----------------------------------------
+PorterStemmer
+The new stem classes had 10863 stems in common
+134928 stems not in the new stem classes
+For the stems not in the new stem classes number of words
+Mean: 1  Median: 1 Mode: 1 Max: 2
+For all stem classes cumulative Dice score
+Mean: 0.42  Median: 0.50 Mode: 0.50
+----------------------------------------
+SnowballStemmer
+The new stem classes had 10665 stems in common
+135437 stems not in the new stem classes
+For the stems not in the new stem classes number of words
+Mean: 1  Median: 1 Mode: 1 Max: 2
+For all stem classes cumulative Dice score
+Mean: 0.42  Median: 0.50 Mode: 0.50
+----------------------------------------

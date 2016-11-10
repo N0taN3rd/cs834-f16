@@ -1,0 +1,8 @@
+sizeClass,matches,covers,count
+4,1,100% fully covered,2
+3,2,0.50% fully covered 0.50% matches stem,1
+3,1,100% fully covered,74
+3,1,100% only matches stem,2
+2,2,0.50% fully covered 0.50% matches stem,21
+2,1,100% fully covered,4141
+2,1,100% only matches stem,82

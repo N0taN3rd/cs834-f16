@@ -1,6 +1,7 @@
 import re
-from csv import DictReader, DictWriter
+import shlex
 from collections import defaultdict
+from subprocess import Popen, PIPE
 from util import dump_pickle
 
 isWord = re.compile('^[a-zA-Z]+$')
@@ -31,6 +32,10 @@ class Term(object):
 
 
 def galago_postingd_csv():
+    cline = './rungalago.sh dump-index index'
+    with open('output_files/idx3.csv', 'w') as retOut:
+        runner = Popen(shlex.split(cline), stdout=retOut, stderr=PIPE)
+        print(runner.stderr.read())
     idx = Idx()
     with open('idx3.csv', 'r') as gal:
         for line in gal:

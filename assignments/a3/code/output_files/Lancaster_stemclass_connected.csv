@@ -1,0 +1,249 @@
+sizeClass,matches,covers,count
+76,15,0.30% fully covered 0.70% matches stem,1
+76,10,0.40% fully covered 0.60% matches stem,1
+72,14,0.20% fully covered 0.80% matches stem,1
+56,5,0.60% fully covered 0.40% matches stem,1
+54,6,0.20% fully covered 0.80% matches stem,1
+53,12,0.20% fully covered 0.80% matches stem,1
+52,5,0.40% fully covered 0.60% matches stem,1
+51,10,0.10% fully covered 0.90% matches stem,1
+50,14,0.30% fully covered 0.70% matches stem,1
+50,10,0.20% fully covered 0.80% matches stem,1
+49,8,0.40% fully covered 0.60% matches stem,1
+48,4,0.50% fully covered 0.50% matches stem,1
+47,1,100% fully covered,1
+46,2,100% fully covered,1
+45,5,0.20% fully covered 0.80% matches stem,1
+44,4,0.50% fully covered 0.50% matches stem,1
+42,6,0.20% fully covered 0.80% matches stem,1
+41,8,0.40% fully covered 0.60% matches stem,1
+41,1,100% fully covered,1
+40,4,0.50% fully covered 0.50% matches stem,1
+40,3,0.70% fully covered 0.30% matches stem,1
+39,7,0.30% fully covered 0.70% matches stem,1
+39,2,0.50% fully covered 0.50% matches stem,1
+38,7,0.10% fully covered 0.90% matches stem,1
+37,7,0.40% fully covered 0.60% matches stem,1
+37,3,0.70% fully covered 0.30% matches stem,1
+37,3,0.30% fully covered 0.70% matches stem,1
+37,1,100% fully covered,1
+36,14,0.20% fully covered 0.80% matches stem,1
+35,4,0.50% fully covered 0.50% matches stem,1
+34,6,0.20% fully covered 0.80% matches stem,1
+34,4,0.50% fully covered 0.50% matches stem,2
+34,2,0.50% fully covered 0.50% matches stem,1
+33,7,0.30% fully covered 0.70% matches stem,1
+33,3,0.70% fully covered 0.30% matches stem,1
+33,3,0.30% fully covered 0.70% matches stem,1
+33,2,0.50% fully covered 0.50% matches stem,1
+32,8,0.10% fully covered 0.90% matches stem,1
+32,8,0.40% fully covered 0.60% matches stem,1
+32,6,0.30% fully covered 0.70% matches stem,1
+32,5,0.60% fully covered 0.40% matches stem,1
+32,4,0.20% fully covered 0.80% matches stem,1
+32,3,0.30% fully covered 0.70% matches stem,2
+32,2,0.50% fully covered 0.50% matches stem,1
+31,5,0.40% fully covered 0.60% matches stem,1
+31,2,0.50% fully covered 0.50% matches stem,1
+31,1,100% fully covered,1
+30,6,0.20% fully covered 0.80% matches stem,1
+30,5,0.20% fully covered 0.80% matches stem,2
+30,5,0.40% fully covered 0.60% matches stem,2
+30,5,0.60% fully covered 0.40% matches stem,1
+30,4,0.50% fully covered 0.50% matches stem,1
+30,3,0.30% fully covered 0.70% matches stem,1
+30,2,0.50% fully covered 0.50% matches stem,1
+29,8,0.20% fully covered 0.80% matches stem,1
+29,6,0.30% fully covered 0.70% matches stem,1
+29,5,0.20% fully covered 0.80% matches stem,2
+29,5,0.40% fully covered 0.60% matches stem,1
+29,4,0.20% fully covered 0.80% matches stem,1
+29,4,0.50% fully covered 0.50% matches stem,1
+29,2,0.50% fully covered 0.50% matches stem,1
+28,9,0.20% fully covered 0.80% matches stem,1
+28,5,0.20% fully covered 0.80% matches stem,1
+28,4,0.20% fully covered 0.80% matches stem,1
+28,3,0.70% fully covered 0.30% matches stem,1
+28,2,100% fully covered,1
+28,1,100% fully covered,1
+27,8,0.20% fully covered 0.80% matches stem,1
+27,7,0.30% fully covered 0.70% matches stem,1
+27,5,0.20% fully covered 0.80% matches stem,2
+27,4,0.20% fully covered 0.80% matches stem,2
+27,3,0.30% fully covered 0.70% matches stem,2
+27,2,0.50% fully covered 0.50% matches stem,1
+27,1,100% fully covered,1
+26,5,0.20% fully covered 0.80% matches stem,1
+26,5,0.60% fully covered 0.40% matches stem,1
+26,4,0.50% fully covered 0.50% matches stem,2
+26,4,0.20% fully covered 0.80% matches stem,1
+26,3,0.30% fully covered 0.70% matches stem,2
+26,2,0.50% fully covered 0.50% matches stem,4
+26,1,100% fully covered,2
+25,5,0.40% fully covered 0.60% matches stem,1
+25,4,0.20% fully covered 0.80% matches stem,1
+25,3,0.30% fully covered 0.70% matches stem,4
+25,3,0.70% fully covered 0.30% matches stem,1
+25,2,0.50% fully covered 0.50% matches stem,1
+25,1,100% fully covered,2
+24,7,0.10% fully covered 0.90% matches stem,1
+24,4,0.50% fully covered 0.50% matches stem,3
+24,4,0.20% fully covered 0.80% matches stem,1
+24,2,0.50% fully covered 0.50% matches stem,2
+24,1,100% fully covered,1
+23,5,0.40% fully covered 0.60% matches stem,1
+23,4,0.20% fully covered 0.80% matches stem,3
+23,4,0.50% fully covered 0.50% matches stem,1
+23,3,0.30% fully covered 0.70% matches stem,1
+23,2,0.50% fully covered 0.50% matches stem,3
+23,1,100% fully covered,3
+22,5,0.20% fully covered 0.80% matches stem,1
+22,5,0.60% fully covered 0.40% matches stem,1
+22,5,0.40% fully covered 0.60% matches stem,1
+22,4,0.80% fully covered 0.20% matches stem,1
+22,4,0.50% fully covered 0.50% matches stem,1
+22,4,0.20% fully covered 0.80% matches stem,1
+22,3,0.30% fully covered 0.70% matches stem,3
+22,3,0.70% fully covered 0.30% matches stem,2
+22,2,0.50% fully covered 0.50% matches stem,2
+22,1,100% fully covered,3
+21,6,0.30% fully covered 0.70% matches stem,1
+21,5,0.40% fully covered 0.60% matches stem,1
+21,4,0.20% fully covered 0.80% matches stem,3
+21,3,0.30% fully covered 0.70% matches stem,3
+21,3,0.70% fully covered 0.30% matches stem,1
+21,2,0.50% fully covered 0.50% matches stem,2
+21,1,100% fully covered,2
+20,5,0.20% fully covered 0.80% matches stem,2
+20,5,0.40% fully covered 0.60% matches stem,1
+20,4,0.20% fully covered 0.80% matches stem,2
+20,3,0.70% fully covered 0.30% matches stem,5
+20,3,0.30% fully covered 0.70% matches stem,4
+20,3,100% fully covered,1
+20,2,0.50% fully covered 0.50% matches stem,3
+20,2,100% fully covered,1
+20,1,100% fully covered,7
+19,6,0.30% fully covered 0.70% matches stem,1
+19,5,0.20% fully covered 0.80% matches stem,2
+19,4,0.20% fully covered 0.80% matches stem,1
+19,3,0.30% fully covered 0.70% matches stem,5
+19,3,0.70% fully covered 0.30% matches stem,1
+19,2,100% fully covered,2
+19,2,0.50% fully covered 0.50% matches stem,1
+19,1,100% fully covered,3
+18,6,0.20% fully covered 0.80% matches stem,1
+18,6,0.30% fully covered 0.70% matches stem,1
+18,5,0.40% fully covered 0.60% matches stem,1
+18,4,0.50% fully covered 0.50% matches stem,2
+18,4,0.20% fully covered 0.80% matches stem,1
+18,3,0.30% fully covered 0.70% matches stem,5
+18,3,0.70% fully covered 0.30% matches stem,3
+18,2,0.50% fully covered 0.50% matches stem,10
+18,2,100% fully covered,3
+18,1,100% fully covered,11
+17,6,0.20% fully covered 0.80% matches stem,2
+17,5,0.40% fully covered 0.60% matches stem,2
+17,5,0.20% fully covered 0.80% matches stem,1
+17,4,0.20% fully covered 0.80% matches stem,5
+17,3,0.30% fully covered 0.70% matches stem,9
+17,3,0.70% fully covered 0.30% matches stem,2
+17,3,100% fully covered,1
+17,2,0.50% fully covered 0.50% matches stem,6
+17,2,100% fully covered,1
+17,1,100% fully covered,12
+16,5,0.20% fully covered 0.80% matches stem,1
+16,5,0.40% fully covered 0.60% matches stem,1
+16,4,0.20% fully covered 0.80% matches stem,3
+16,4,0.50% fully covered 0.50% matches stem,1
+16,3,0.30% fully covered 0.70% matches stem,7
+16,3,0.70% fully covered 0.30% matches stem,2
+16,2,0.50% fully covered 0.50% matches stem,13
+16,2,100% fully covered,2
+16,1,100% fully covered,16
+15,6,0.20% fully covered 0.80% matches stem,1
+15,5,0.40% fully covered 0.60% matches stem,2
+15,4,0.20% fully covered 0.80% matches stem,4
+15,4,0.50% fully covered 0.50% matches stem,2
+15,3,0.30% fully covered 0.70% matches stem,4
+15,3,0.70% fully covered 0.30% matches stem,2
+15,2,0.50% fully covered 0.50% matches stem,18
+15,2,100% fully covered,3
+15,1,100% fully covered,34
+14,6,0.20% fully covered 0.80% matches stem,2
+14,4,0.20% fully covered 0.80% matches stem,4
+14,4,0.50% fully covered 0.50% matches stem,4
+14,4,0.80% fully covered 0.20% matches stem,1
+14,3,0.30% fully covered 0.70% matches stem,9
+14,3,0.70% fully covered 0.30% matches stem,3
+14,2,0.50% fully covered 0.50% matches stem,19
+14,2,100% fully covered,1
+14,1,100% fully covered,28
+13,5,0.20% fully covered 0.80% matches stem,1
+13,4,0.20% fully covered 0.80% matches stem,3
+13,4,0.50% fully covered 0.50% matches stem,1
+13,3,0.30% fully covered 0.70% matches stem,11
+13,3,0.70% fully covered 0.30% matches stem,2
+13,2,0.50% fully covered 0.50% matches stem,21
+13,2,100% fully covered,3
+13,1,100% fully covered,48
+12,5,0.60% fully covered 0.40% matches stem,1
+12,4,0.20% fully covered 0.80% matches stem,4
+12,3,0.30% fully covered 0.70% matches stem,8
+12,3,0.70% fully covered 0.30% matches stem,4
+12,2,0.50% fully covered 0.50% matches stem,33
+12,2,100% fully covered,1
+12,1,100% fully covered,48
+11,5,0.20% fully covered 0.80% matches stem,3
+11,4,0.20% fully covered 0.80% matches stem,2
+11,4,0.50% fully covered 0.50% matches stem,1
+11,3,0.30% fully covered 0.70% matches stem,16
+11,3,0.70% fully covered 0.30% matches stem,3
+11,2,0.50% fully covered 0.50% matches stem,30
+11,2,100% fully covered,6
+11,1,100% fully covered,91
+10,5,0.20% fully covered 0.80% matches stem,1
+10,4,0.20% fully covered 0.80% matches stem,2
+10,3,0.30% fully covered 0.70% matches stem,10
+10,3,0.70% fully covered 0.30% matches stem,1
+10,2,0.50% fully covered 0.50% matches stem,42
+10,2,100% fully covered,3
+10,1,100% fully covered,122
+9,5,0.20% fully covered 0.80% matches stem,1
+9,4,0.20% fully covered 0.80% matches stem,2
+9,4,0.50% fully covered 0.50% matches stem,1
+9,3,0.30% fully covered 0.70% matches stem,10
+9,3,0.70% fully covered 0.30% matches stem,9
+9,2,0.50% fully covered 0.50% matches stem,32
+9,2,100% fully covered,4
+9,1,100% fully covered,197
+8,4,0.20% fully covered 0.80% matches stem,1
+8,4,0.50% fully covered 0.50% matches stem,1
+8,3,0.30% fully covered 0.70% matches stem,18
+8,2,0.50% fully covered 0.50% matches stem,49
+8,2,100% fully covered,10
+8,1,100% fully covered,287
+7,4,0.50% fully covered 0.50% matches stem,1
+7,3,0.30% fully covered 0.70% matches stem,18
+7,3,0.70% fully covered 0.30% matches stem,5
+7,2,0.50% fully covered 0.50% matches stem,76
+7,2,100% fully covered,7
+7,1,100% fully covered,427
+6,4,0.20% fully covered 0.80% matches stem,3
+6,3,0.30% fully covered 0.70% matches stem,11
+6,3,0.70% fully covered 0.30% matches stem,2
+6,2,0.50% fully covered 0.50% matches stem,108
+6,2,100% fully covered,7
+6,1,100% fully covered,607
+5,4,0.20% fully covered 0.80% matches stem,1
+5,3,0.30% fully covered 0.70% matches stem,14
+5,2,0.50% fully covered 0.50% matches stem,141
+5,2,100% fully covered,8
+5,1,100% fully covered,956
+4,3,0.30% fully covered 0.70% matches stem,12
+4,2,0.50% fully covered 0.50% matches stem,168
+4,1,100% fully covered,1953
+3,3,0.30% fully covered 0.70% matches stem,3
+3,2,0.50% fully covered 0.50% matches stem,137
+3,1,100% fully covered,2721
+2,2,0.50% fully covered 0.50% matches stem,22
+2,1,100% fully covered,1896

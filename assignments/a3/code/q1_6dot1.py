@@ -1,18 +1,16 @@
 import json
 import shlex
-from collections import defaultdict
-
-import networkx as nx
-from networkx.drawing.nx_agraph import write_dot, to_agraph
-from networkx import Graph, DiGraph
+import statistics
 from decimal import *
 from subprocess import Popen, PIPE
+
+import re
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.snowball import SnowballStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.stem.lancaster import LancasterStemmer
-from functional import seq, pseq
-from util import dump_pickle, read_pickle
+from functional import pseq
+from util import read_pickle, dump_pickle
 from itertools import combinations
 from collections import Counter
 
@@ -56,66 +54,44 @@ class Stem(object):
         return self.__str__()
 
 
+class StemClazzIdx(dict):
+    def __missing__(self, key):
+        val = self[key] = StemClazz(key)
+        return val
+
+
 class StemClazz(object):
-    def __init__(self, line):
-        self.clazz = line.split(' ')
-        self.matchesOld = 0
-        self.matchesStem = []
-        self.coverage = ''
-        self.cboth = 0
-        self.ostem = 0
+    def __init__(self, stem):
+        self.stem = stem
+        self.pair_scores = {}
+        self.dice_score = None
+        self.pairs = 0
+        self.words = set()
 
-    def search(self, alphaList):
-        for alphaStem in alphaList:
-            if alphaStem.stem in self.clazz:
-                self.matchesOld += 1
-                matchCount = 0
-                for term in alphaStem.stemsTo:
-                    if term in self.clazz:
-                        matchCount += 1
-                if matchCount == len(alphaStem.stemsTo):
-                    self.matchesStem.append((alphaStem.stem, 'contains stem & terms'))
-                else:
-                    self.matchesStem.append((alphaStem.stem, 'matches only stem'))
+    def add_pair_score(self, w1, w2, score):
+        if self.pair_scores.get((w2, w1), None) is None:
+            self.pair_scores[w1, w2] = float(score)
+            self.pairs += 1
+        self.words.add(w1)
+        self.words.add(w2)
 
-    def cal_coverage(self):
-        for stem, howMuch in self.matchesStem:
-            if howMuch == 'contains stem & terms':
-                self.cboth += 1
+    def cumulative_dice(self):
+        if self.dice_score is None:
+            wc = len(self.words)
+            if wc > 2:
+                self.dice_score = sum(self.pair_scores.values()) / self.pairs
             else:
-                self.ostem += 1
-        if self.matchesOld == 1:
-            if self.cboth > 0:
-                self.coverage = '100% fully covered'
-            else:
-                self.coverage = '100% only matches stem'
-        else:
-            if self.cboth > 0 and self.ostem > 0:
-                bothp = self.cboth / self.matchesOld
-                ostemp = self.ostem / self.matchesOld
-                self.coverage = '%.2f' % round(bothp,1) + '% fully covered' + ' %.2f' % round(ostemp,1) + '% matches stem'
-            elif self.ostem == 0:
-                self.coverage = '100% fully covered'
-            else:
-                self.coverage = '100% only matches stem'
+                self.dice_score = sum(self.pair_scores.values())
+        return self.dice_score
+
+    def clazz(self):
+        return '/%s %.3f %s' % (self.stem, self.cumulative_dice(), ' '.join(sorted(self.words)))
 
     def __str__(self):
-        return '%s %d %s %s' % (self.clazz, self.matchesOld, self.coverage, self.matchesStem,)
+        return '%s %d %s' % (self.stem, len(self.words), self.pair_scores)
 
     def __repr__(self):
         return self.__str__()
-
-
-class CountDict(dict):
-    def __missing__(self, key):
-        ret = self[key] = CoverageDict()
-        return ret
-
-
-class CoverageDict(dict):
-    def __missing__(self, key):
-        ret = self[key] = Counter()
-        return ret
 
 
 def stem_map(x):
@@ -138,18 +114,17 @@ def stem_index():
         stemmer_idx = pseq(words.split(' ')) \
             .flat_map(stem_map) \
             .fold_left(StemmerIdx(), fold_fun)
-        dump_pickle(stemmer_idx, 'pickled/stemmerIdx3.pickle')
+        dump_pickle(stemmer_idx, 'pickled/stemmerIdx.pickle')
         for stemmer, stemdic in stemmer_idx.items():
-            print(stemmer)
-            with open('output_files/idx3_%s.txt' % stemmer, 'w') as stemOut:
+            print('stemming index with %s' % stemmer)
+            with open('output_files/idx_%s.txt' % stemmer, 'w') as stemOut:
                 stemdic.write_class(stemOut)
 
 
-# pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip3 install -U
-
 def build_stem_queries():
-    stemmer_idx = read_pickle('pickled/stemmerIdx3.pickle')
+    stemmer_idx = read_pickle('pickled/stemmerIdx.pickle')
     for stemmer, stemdic in stemmer_idx.items():
+        print('building queries for %s' % stemmer)
         queries = []
         c = 0
         for stem in stemdic.values():
@@ -184,21 +159,18 @@ def build_stem_queries():
                 'index': 'index3',
                 'queryType': 'complex'
             }, qout, indent=2)
-        #
+        print('executing queries for %s' % stemmer)
         cline = './rungalago.sh threaded-batch-search %s' % qloc
-        print(shlex.split(cline))
         with open('output_files/%s_query_ret.trec' % stemmer, 'w') as retOut:
             runner = Popen(shlex.split(cline), stdout=retOut, stderr=PIPE)
-        print(runner.stderr.read())
-        print(runner.returncode)
+            print(runner.stderr.read())
 
 
 def write_dice():
-    # build_stem_queries()
     tol = Decimal(0.001)
     for stemmer in ['Lancaster', 'WordNetLemmatizer', 'PorterStemmer', 'SnowballStemmer']:
         count = {1: Counter(), 2: Counter()}
-        print(stemmer)
+        print('calculating dice for %s' % stemmer)
         with open('output_files/%s_query_ret.trec' % stemmer, 'r') as trec, \
                 open('output_files/%s_dice.txt' % stemmer, 'w') as out, \
                 open('output_files/%s_dice_filtered.txt' % stemmer, 'w') as outf:
@@ -210,83 +182,64 @@ def write_dice():
                 a = count[1]['%s,%s' % (stem, c1)]
                 b = count[1]['%s,%s' % (stem, c2)]
                 # cause combine is or https://sourceforge.net/p/lemur/wiki/Belief%20Operations/
-                ab = (a + b) - counts
+                ab = a + b - counts
                 dice = ab / (a + b)
                 out.write('%s %.3f\n' % (stemC1C2, dice))
                 if Decimal(dice) >= tol:
                     outf.write('%s %.3f\n' % (stemC1C2, dice))
 
 
-def find_connected():
-    print('hi')
-    for stemmer in ['Lancaster', 'WordNetLemmatizer', 'PorterStemmer', 'SnowballStemmer']:
-        with open('output_files/%s_dice_filtered.txt' % stemmer, 'r') as sin, \
-                open('output_files/%s_dice_connected.txt' % stemmer, 'w') as out, \
-                open('output_files/%s_dice_sconnected.txt' % stemmer, 'w') as out2:
-            g = DiGraph()
-            g2 = Graph()
-            nodes = set()
-            edges = set()
-            for line in sin:
-                stemC1C2, dice = line.rstrip().split(' ')
-                stem, c1, c2 = stemC1C2.split(',')
-                nodes.add(stem)
-                nodes.add(c1)
-                nodes.add(c2)
-                edges.add((stem, c1, float(dice)))
-                edges.add((stem, c2, float(dice)))
-                edges.add((c1, stem, float(dice)))
-                edges.add((c2, stem, float(dice)))
-            for n in nodes:
-                g.add_node(n)
-                g2.add_node(n)
-            for stem, term, dice in edges:
-                g.add_edge(stem, term, weight=dice)
-                g2.add_edge(stem, term, weight=dice)
-            for connected in nx.connected_components(g):
-                out.write('%s\n' % ' '.join(connected))
-            for connected in nx.strongly_connected_components(g):
-                out2.write('%s\n' % ' '.join(connected))
-
-
-def coverageReport():
+def write_report():
     stemmer_idx = read_pickle('pickled/stemmerIdx3.pickle')
-    for stemmer in ['Lancaster', 'WordNetLemmatizer', 'PorterStemmer', 'SnowballStemmer']:
-        with open('output_files/%s_dice_connected.txt' % stemmer, 'r') as sin, \
-                open('output_files/%s_dice_sconnected.txt' % stemmer, 'r') as sin2:
-            stemdic = stemmer_idx[stemmer]
-            writeCoverage(stemmer, stemdic, 'connected', sin)
-            writeCoverage(stemmer, stemdic, 'sconnected', sin2)
-
-
-def writeCoverage(stemmer, stemdic, clust, sin):
-    alphaStem = defaultdict(list)
-    for stem in stemdic.values():
-        alphaStem[stem.stem[0]].append(stem)
-    alphaStemClazz = defaultdict(list)
-    for line in sin:
-        line = line.rstrip()
-        alphaStemClazz[line[0]].append(StemClazz(line))
-    for alpha, stemclzzs in alphaStemClazz.items():
-        for sclzz in stemclzzs:
-            sclzz.search(alphaStem[alpha])
-    alphaClazzCover = defaultdict(CoverageDict)
-    for alpha, stemclzzs in alphaStemClazz.items():
-        for sclzz in stemclzzs:
-            sclzz.cal_coverage()
-            alphaClazzCover[len(sclzz.clazz)][sclzz.matchesOld][sclzz.coverage] += 1
-    with open('output_files/%s_stemclass_%s.csv' % (stemmer, clust), 'w') as covOut:
-        covOut.write('sizeClass,matches,covers,count\n')
-        for sizeClazz, mathnum in sorted(alphaClazzCover.items(), key=lambda x: x[0], reverse=True):
-            for matches, coverages in sorted(mathnum.items(), key=lambda x: x[0], reverse=True):
-                for covers, count in sorted(coverages.items(), key=lambda x: x[1], reverse=True):
-                    print(sizeClazz, matches, covers, count)
-                    covOut.write('%d,%d,%s,%d\n' % (sizeClazz, matches, covers, count))
-                print('----------------------------------------')
-            print('+++++++++++++++++++++++++++++++++++++++++')
+    look_for = 'admir'
+    keep = []
+    with open('output_files/q1_report.txt', 'w') as stemr:
+        for stemmer in ['Lancaster', 'WordNetLemmatizer', 'PorterStemmer', 'SnowballStemmer']:
+            print('writing report for %s' % stemmer)
+            clazzIdx = StemClazzIdx()
+            old_stemmer_idx = stemmer_idx[stemmer]
+            with open('output_files/%s_dice_filtered.txt' % stemmer, 'r') as sin:
+                for line in sin:
+                    stemw1w2, score = line.rstrip().split(' ')
+                    stem, w1, w2 = stemw1w2.split(',')
+                    clazzIdx[stem].add_pair_score(w1, w2, score)
+            oks = set(old_stemmer_idx.keys())
+            nks = set(clazzIdx.keys())
+            diff = oks.difference(nks)
+            old_lens = []
+            for old in diff:
+                old_lens.append(len(old_stemmer_idx[old].stemsTo))
+            with open('output_files/%s_new_stem_class.txt' % stemmer, 'w') as classOut:
+                stemr.write('%s\n' % stemmer)
+                stemr.write('The new stem classes had %d stems in common\n' % len(oks.intersection(nks)))
+                stemr.write('%d stems not in the new stem classes\n' % len(diff))
+                stemr.write('For the stems not in the new stem classes number of words\n')
+                stemr.write('Mean: %d  Median: %d Mode: %d Max: %d\n' % (
+                    statistics.mean(old_lens), statistics.median(old_lens), statistics.mode(old_lens), max(old_lens)))
+                coverage = []
+                for sclazz in sorted(clazzIdx.values(), key=lambda clazz: clazz.stem):
+                    classOut.write('/%s,%.3f,%s\n' % (sclazz.stem, sclazz.cumulative_dice(), ' '.join(sclazz.words)))
+                    if look_for == sclazz.stem:
+                        keep.append((stemmer, sclazz))
+                    coverage.append(sclazz.cumulative_dice())
+                    old_stem = old_stemmer_idx[sclazz.stem]
+                    oldwords = set(old_stem.stemsTo)
+                    ondif = oldwords.difference(sclazz.words)
+                    if len(ondif) > 0:
+                        stemr.write('the original stem class %s had %d more words in it' % (sclazz.stem, len(ondif)))
+                        stemr.write('the new stem class has a cumulative dice score of %d' % sclazz.cumulative_dice())
+                stemr.write('For all stem classes cumulative Dice score\n')
+                stemr.write('Mean: %.2f  Median: %.2f Mode: %.2f\n' % (
+                    statistics.mean(coverage), statistics.median(coverage), statistics.mode(coverage)))
+                stemr.write('----------------------------------------\n')
+    print('writing final report section')
+    with open('same.txt', 'w') as rout:
+        for s, so in keep:
+            rout.write('%s %s\n' % (s, so.clazz()))
 
 
 if __name__ == '__main__':
-    # write_dice()
-    # find_connected()
-    coverageReport()
+    stem_index()
+    build_stem_queries()
+    write_dice()
+    write_report()

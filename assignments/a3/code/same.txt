@@ -1,0 +1,3 @@
+Lancaster /admir 0.890 admirable admiral admirals admiration admire admired admirer admirers admires admiring
+PorterStemmer /admir 0.890 admirable admiral admirals admiration admire admired admirer admirers admires admiring
+SnowballStemmer /admir 0.890 admirable admiral admirals admiration admire admired admirer admirers admires admiring

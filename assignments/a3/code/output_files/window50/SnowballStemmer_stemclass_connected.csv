@@ -1,0 +1,46 @@
+sizeClass,matches,covers,count
+13,1,100% only matches stem,1
+12,1,100% only matches stem,2
+12,1,100% fully covered,1
+11,2,0.50% fully covered 0.50% matches stem,1
+11,1,100% only matches stem,3
+10,2,100% only matches stem,2
+10,2,0.50% fully covered 0.50% matches stem,1
+10,1,100% only matches stem,10
+10,1,100% fully covered,2
+9,3,100% only matches stem,1
+9,2,100% only matches stem,2
+9,2,0.50% fully covered 0.50% matches stem,1
+9,1,100% only matches stem,9
+9,1,100% fully covered,3
+8,2,100% only matches stem,6
+8,2,0.50% fully covered 0.50% matches stem,1
+8,1,100% only matches stem,20
+8,1,100% fully covered,7
+7,2,100% only matches stem,5
+7,2,0.50% fully covered 0.50% matches stem,2
+7,1,100% only matches stem,43
+7,1,100% fully covered,14
+6,2,100% only matches stem,9
+6,2,0.50% fully covered 0.50% matches stem,1
+6,2,100% fully covered,1
+6,1,100% only matches stem,87
+6,1,100% fully covered,39
+5,2,100% only matches stem,21
+5,2,0.50% fully covered 0.50% matches stem,6
+5,2,100% fully covered,1
+5,1,100% only matches stem,175
+5,1,100% fully covered,98
+4,3,0.30% fully covered 0.70% matches stem,1
+4,2,100% only matches stem,14
+4,2,0.50% fully covered 0.50% matches stem,7
+4,1,100% only matches stem,295
+4,1,100% fully covered,247
+3,2,100% only matches stem,29
+3,2,0.50% fully covered 0.50% matches stem,22
+3,1,100% fully covered,1148
+3,1,100% only matches stem,811
+2,2,0.50% fully covered 0.50% matches stem,17
+2,2,100% only matches stem,16
+2,1,100% fully covered,2859
+2,1,100% only matches stem,777

@@ -1,0 +1,9 @@
+sizeClass,matches,covers,count
+5,2,100% fully covered,2
+5,1,100% fully covered,1
+4,2,100% fully covered,1
+4,1,100% fully covered,10
+3,2,0.50% fully covered 0.50% matches stem,3
+3,1,100% fully covered,223
+2,2,0.50% fully covered 0.50% matches stem,22
+2,1,100% fully covered,5619
