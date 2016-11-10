@@ -119,7 +119,6 @@ def dump_window_idx():
 
 
 def association_measures():
-    dump_window_idx()
     ab_count, ab_count_wins, wins = read_pickle('pickled/window5Counts.pickle')
     rets = []
     for (a, b) in ab_count_wins.keys():

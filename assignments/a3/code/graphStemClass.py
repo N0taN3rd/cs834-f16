@@ -203,9 +203,9 @@ def find_connected():
             for stem, term, dice in edges:
                 g.add_edge(stem, term, weight=dice)
                 g2.add_edge(stem, term, weight=dice)
-            for connected in nx.connected_components(g2):
+            for connected in sorted(nx.connected_components(g2),key=lambda s: list(s)[0]):
                 out.write('%s\n' % ' '.join(connected))
-            for connected in nx.strongly_connected_components(g):
+            for connected in sorted(nx.strongly_connected_components(g),key=lambda s: list(s)[0]):
                 out2.write('%s\n' % ' '.join(connected))
 
 
