@@ -8,57 +8,6 @@ from collections import Counter
 only_words = re.compile('^[a-zA-Z]+~[a-zA-Z]+$')
 
 
-class StemClazz(object):
-    def __init__(self, line):
-        self.clazz = line.split(' ')
-        self.matchesOld = 0
-        self.matchesStem = []
-        self.coverage = ''
-        self.cboth = 0
-        self.ostem = 0
-
-    def search(self, alphaList):
-        for alphaStem in alphaList:
-            if alphaStem.stem in self.clazz:
-                self.matchesOld += 1
-                matchCount = 0
-                for term in alphaStem.stemsTo:
-                    if term in self.clazz:
-                        matchCount += 1
-                if matchCount == len(alphaStem.stemsTo):
-                    self.matchesStem.append((alphaStem.stem, 'contains stem & terms'))
-                else:
-                    self.matchesStem.append((alphaStem.stem, 'matches only stem'))
-
-    def cal_coverage(self):
-        for stem, howMuch in self.matchesStem:
-            if howMuch == 'contains stem & terms':
-                self.cboth += 1
-            else:
-                self.ostem += 1
-        if self.matchesOld == 1:
-            if self.cboth > 0:
-                self.coverage = '100% fully covered'
-            else:
-                self.coverage = '100% only matches stem'
-        else:
-            if self.cboth > 0 and self.ostem > 0:
-                bothp = self.cboth / self.matchesOld
-                ostemp = self.ostem / self.matchesOld
-                self.coverage = '%.2f' % round(bothp, 1) + '% fully covered' + ' %.2f' % round(ostemp,
-                                                                                               1) + '% matches stem'
-            elif self.ostem == 0:
-                self.coverage = '100% fully covered'
-            else:
-                self.coverage = '100% only matches stem'
-
-    def __str__(self):
-        return '%s %d %s %s' % (self.clazz, self.matchesOld, self.coverage, self.matchesStem,)
-
-    def __repr__(self):
-        return self.__str__()
-
-
 def dice(a, b, ab_wins, ab_count):
     return (2 * ab_wins[a, b]) / (ab_count[a] + ab_count[b])
 
@@ -93,7 +42,7 @@ class Win5Ret(object):
         return self.__str__()
 
     def write_csv(self, out):
-        out.write('%s, %s, %.5f, %.5f, %.10f,%.5f\n' % (
+        out.write('%s, %s, %.5f, %.5f, %.5f,%.5f\n' % (
             self.a, self.b, self.dice, self.mi, self.emi, self.chi))
 
 

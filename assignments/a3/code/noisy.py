@@ -1,5 +1,6 @@
 import re
 import os.path
+import argparse
 from nltk.corpus import brown, gutenberg, reuters, inaugural, words
 from collections import Counter
 from functional import pseq as parseq
@@ -73,7 +74,7 @@ def damerau_levenshtein(a, b):
     return table[lena, lenb]
 
 
-def dist_away(mispell, wc, dist=3):
+def dist_away(mispell, wc, dist=2):
     return parseq(wc.keys()) \
         .map(lambda w: (w, damerau_levenshtein(mispell, w))) \
         .filter(lambda wdist: wdist[1] <= dist) \
@@ -85,11 +86,18 @@ def probability(word, wc):
 
 
 def correct(mispell, wc):
-    return max(dist_away(mispell, wc), key=lambda w: probability(w, wc))
+    try:
+        return max(dist_away(mispell, wc), key=lambda w: probability(w, wc))
+    except Exception:
+        return 'No Spellz Korrektion Found'
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Korrect Yo Spellz')
+    parser.add_argument('--wordz', type=str, nargs='+',
+                        help='wordz to make spellz good',required=True)
+    args = parser.parse_args()
     wc = build_word_count()
-    # print(wc['k'])
-    print(correct('korrectud', wc))
-    # print(len(wc))
+    for badd in args.wordz:
+        print('The correction for the word',badd,'is')
+        print(correct(badd, wc))

@@ -95,7 +95,15 @@ breaklines=true,
 mathescape=true
 }
 
-
+\newmintedfile[rcode]{S}{
+frame=lines,
+framesep=2mm,
+fontsize=\footnotesize,
+showtabs =false,
+autogobble=true,
+breaklines=true,
+mathescape=true
+}
 \newmintinline[ibash]{bash} {
 }
 \RecustomVerbatimCommand{\VerbatimInput}{VerbatimInput}%
@@ -168,11 +176,13 @@ But when grepping for that stem, \autoref{fig:grep}, it is clear to see WordNet 
 \end{figure}
 \newpage
 \begin{code}
-\captionof{listing}{Extract Terms From Index} \label{code:idxr}
+\captionof{listing}{Extract Terms From Index}
+ \label{code:idxr}
 	\pycode{code/indexer.py}
 \end{code}
 \begin{code}
-\captionof{listing}{Stem Cluser Generation Dice} \label{code:scd}
+\captionof{listing}{Stem Cluser Generation Dice} 
+\label{code:scd}
 	\pycode{code/q1_6dot1.py}
 \end{code}
 \newpage
@@ -182,22 +192,106 @@ using the small wikipedia example, choose 10 words
 and create stem classes as per the algorithm on pp. 191-192
 \end{verbatim}
 \subsection{Answer}
-This question builds heavily on the work done in question one and uses the work done by \autoref{q1} up to the generation of the stem classes which is where I will focus on in answering this question except that the queries used \#uw:50 as the operator for the co-occurrence query. The code for this question can been seen in \autoref{code:gsc}.  Like \autoref{q1} all stemmers used in it were considered when creating the graphs. The graphs were creating using networkx library and the edges were stem to word and word to stem to ensure the connection. Along with the connected components the strongly connected components were found for each stemmers graph.
-\begin{figure}[h]
+This question builds heavily on the work done in question one and uses the work done by \autoref{q1} up to the generation of the stem classes which is where I will focus on in answering this question except that the queries used \#uw:50 as the operator for the co-occurrence query. The code for this question can been seen in \autoref{code:gsc}.  Like \autoref{q1} all stemmers used in it were considered when creating the graphs. The graphs were creating using networkx library and the edges were stem to word and word to stem to ensure the connection. Both connected components and the strong connected components directed graph counterpart were generated. In order to make presenting the results of this work I combined the connected and strongly connected data points into a single graph per stemmer. The code used to produce the graphs graphStemClass.py can bee seen in  \autoref{code:gsc} and the R code stemClassClusterReport.R can bee seen in \autoref{code:sccgr}. \newline \newline \noindent 
+The colors of each graph represent the percentage of how well these new stem class fair in comparison to the old. For instance when the label states 100\% fully covered it means that the new stem class contained the original stem i.e /demi and all the words covered by the original likewise 100\% only stem means the new stem class only contained the stem not any of the words contained in the old. All other percentages represent the fractional amount of the previous two measures. The different graph types are encoded in the shape attribute with the y axis representing how many times a stem class occurred for the x axis which is the size of the class i.e how many words are contained in it. 
+\newline \newline \noindent  As seen in \autoref{fig:lanc} lancaster, \autoref{fig:portc} Porter, and \autoref{fig:snbc} Snowball the new stem classes contained more words than the original and the graphs generated take the shape of a power law distribution. The Porter and Snowball stemmer had the least number of new stem classes created and generally had less of the original stem classes words. As stated in the answer to  \autoref{q1} the WordNetLemmatizer, \autoref{fig:wrdnc}, performed the worst out of the four.
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.8]{Lancasterconnected.png}
 \caption{Lancaster Connected}
 \label{fig:lanc}
 \end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{PorterStemmerconnected.png}
+\caption{Porter Connected}
+\label{fig:portc}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{SnowballStemmerconnected.png}
+\caption{Snowball Connected}
+\label{fig:snbc}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{WordNetLemmatizerconnected.png}
+\caption{WordNet Lemmatizer Connected}
+\label{fig:wrdnc}
+\end{figure}
 \begin{code}
-\captionof{listing}{Stem Class From Graph Using Ordered Window} \label{code:gsc}
+\captionof{listing}{Stem Class From Graph Using Ordered Window} 
+\label{code:gsc}
 	\pycode{code/graphStemClass.py}
+\end{code}
+\begin{code}
+\captionof{listing}{Stem Class Cluster Graphs}
+ \label{code:sccgr}
+	\rcode{code/stemClassClusterReport.R}
+\end{code}
+\newpage
+\section{Question 4.2}
+\begin{verbatim}
+MLN2: using the small wikipedia example, choose 10 words
+and compute MIM, EMIM, chi square, dice association
+measures for full document & 5 word windows (cf. pp. 203-
+205)
+\end{verbatim}
+\subsection{Answer}
+In order to complete this question a 5 word window was created using \newline \ibash{./rungalago.sh build-window 5 false index3 htmls} where false was to create unordered window. The python file associations.py \autoref{code:associations} was used to generate the results which were over the all the words contained in the wikipedia collection. \autoref{tbl:10} shows the results after I hand picked ten most interesting ones of which 5 were looked for using grep. The first word rascal has high dice and mi with dizzee but the context in which this happens is unknown. Sportscar is highly associated with boxster along Ozzy Ozbourne and Lynyrd Skynyrd both of which I was unsure would be in this collection. Coder well robocoder has an association with lesfer this association I am completely unsure off. The others were the most recognizable pairs when glancing in the file. I am for sure that the $chi^2$ measure was completely miscalculated along with emi. I can only attribute this to human error or the number of occurrences to number of words was so small it threw off the calculations.
+\begin{table}[H]
+\centering
+\caption{10 Word Associations}
+\label{tbl:10}
+\begin{tabular}{llllll}
+w1 & w2 & dice & mi & emi & chi2 \\
+dizzee & rascal & 1.0 & 1.0 & 0.0000017097 & 88184514016920.98 \\
+sportscar & boxster & 1.00000 & 1.00000 & 0.0000017097 & 88184514016920.98 \\
+ozzy & osbourne & 1.00000 & 0.50000 & 0.0000032718 & 88184514016920.98 \\
+lynyrd & skynyrd & 1.00000 & 0.50000 & 0.0000032718 & 88184514016920.98 \\
+jeepers & creepers & 1.00000 & 1.00 & 0.0000017097 & 88184514016920.98 \\
+robocoder & lesfer & 0.50000 & 0.125 & 0.0000029765 & 22046128504230.24 \\
+spiffy & sperry & 0.42857 & 0.0375 & 0.0000081603 & 19841515653807.22 \\
+pyrokinetic & thermokinetic & 0.40 & 0.16667 & 0.0000015189 & 14697419002820.16 \\
+friends & video & 0.00068 & 0.00 & 0.0000002062 & 49448444.52 \\
+career & research & 0.00068 & 0.00 & 0.0000000783 & 45144302.65
+\end{tabular}
+\end{table}
+\begin{code}
+\captionof{listing}{Association Measures} 
+\label{code:associations}
+	\pycode{code/associations.py}
+\end{code}
+\newpage
+\section{Question 4.2}
+\begin{verbatim}
+6.2. Create a simple spelling corrector based on the noisy channel model. Use a
+single-word language model, and an error model where all errors with the same
+edit distance have the same probability. Only consider edit distances of 1 or 2.
+Implement your own edit distance calculator (example code can easily be found
+on the Web).
+\end{verbatim}
+\subsection{Answer}
+The correct spelling of words was provides using the brown, gutenberg,reuters, ingaugural and words corpus's available from the nltk library giving a total of 285,673 words. Calculating the edit distance was done using the Damerau Levenshtein distance (my third implementation, the first two were native C++ implementations for \href{https://github.com/N0taN3rd/Native-To-Java-StringUtils}{Java}). I must confess I am not sure I meet the error model requirement but make up for that in the search space. Finding the correction is done by getting the edit distance for 285,673 words to the misspelled word and then filtering the weights to keep only those who are within a distance of two all in parallel. The probability calculation is the \mintinline{python3}{within2Word / sum(wordCounts)}. The correction is the maximum probability of all the words remaining after filtering, if no words are returned \mintinline{python3}{'No Spellz Korrektion Found'} is returned ;) \newline The code for this noisy.py \autoref{code:noise}.
+Running the code \ibash{python3 noisy.py --wordz korrectud lov} produced the following output \autoref{fig:noise}.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{noisy.png}
+\caption{Noisy Spell Corrector Run}
+\label{fig:noise}
+\end{figure}
+\begin{code}
+\captionof{listing}{Noisy Spell Corrector} 
+\label{code:noise}
+	\pycode{code/noisy.py}
 \end{code}
 \newpage
 \begin{code}
-\captionof{listing}{Run Galago} \label{code:rg}
+\captionof{listing}{Run Galago}
+ \label{code:rg}
 	\shellcode{code/rungalago.sh}
 \end{code}
 
-\newpage
+
+
 \end{document}
