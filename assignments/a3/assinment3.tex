@@ -132,7 +132,7 @@ As was mentioned in the this section for assignment two the size considerations 
 The trec files produces by \textit{batch-search} and the indexes created by \textit{build} functions of galago prohibit them from inclusion in this report. Also used in this report the shell script \textit{rungalago.sh}, \autoref{code:rg}, was used to streamline the usage of galago by providing the argument boiler plate to command which required more than path arguments and to run the bin script for galago which resides in the nested directory structure of the application.  The two commands which required the argument boiler plate are build and build-window both create a search index whereas the latter creates a windowed version of the first. \newline 
 The version of galago used in this report is 3.10, which was rebuilt from source, whereas the version available via the link found on the textbooks \href{http://www.search-engines-book.com/}{web-site} is version 1.04 built in 2009. Even tho galago is a Java application, it was found that this version suffered from performance issues due to its age. The biggest difference in 3.10 from 1.04 is that batch queries are in JSON format not XML and all other changes are minor feature additions and performance increases.
 \newpage
-\section{Question 4.2} \label{q1}
+\section{Question 6.1} \label{q1}
 \begin{verbatim}
 6.1. Using the Wikipedia collection provided at the book website, create a sample
 of stem clusters by the following process:
@@ -230,9 +230,9 @@ The colors of each graph represent the percentage of how well these new stem cla
 	\rcode{code/stemClassClusterReport.R}
 \end{code}
 \newpage
-\section{Question 4.2}
+\section{MLN2}
 \begin{verbatim}
-MLN2: using the small wikipedia example, choose 10 words
+using the small wikipedia example, choose 10 words
 and compute MIM, EMIM, chi square, dice association
 measures for full document & 5 word windows (cf. pp. 203-
 205)
@@ -263,7 +263,7 @@ career & research & 0.00068 & 0.00 & 0.0000000783 & 45144302.65
 	\pycode{code/associations.py}
 \end{code}
 \newpage
-\section{Question 4.2}
+\section{Question 6.2}
 \begin{verbatim}
 6.2. Create a simple spelling corrector based on the noisy channel model. Use a
 single-word language model, and an error model where all errors with the same
@@ -286,13 +286,9 @@ Running the code \ibash{python3 noisy.py --wordz korrectud lov} produced the fol
 	\pycode{code/noisy.py}
 \end{code}
 \section{Not Attempted}
-\newpage
 \begin{code}
 \captionof{listing}{Run Galago}
  \label{code:rg}
 	\shellcode{code/rungalago.sh}
 \end{code}
-
-
-
 \end{document}
