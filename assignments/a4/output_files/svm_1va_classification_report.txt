@@ -1,0 +1,9 @@
+\begin{tabular}{c | c c c c}
+Class & Precision & Recall & F-score & Support\\
+\hline
+\hline\\
+setosa & 1.0 & 1.0 & 1.0 & 16\\
+versicolor & 0.91 & 0.87 & 0.89 & 23\\
+virginica & 0.86 & 0.9 & 0.88 & 21\\
+avg & 0.92 & 0.92 & 0.92 & 60\\
+\end{tabular}
