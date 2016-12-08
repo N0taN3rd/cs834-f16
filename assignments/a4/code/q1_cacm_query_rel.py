@@ -2,6 +2,7 @@ from util import *
 from contextClasses import *
 from assignmentFilePaths import *
 from cam_q_utils import *
+from ranking_methods import ndcg_at_k, average_precision, precision_at_k
 
 
 def build_idx_qs():
@@ -9,8 +10,6 @@ def build_idx_qs():
     if idx_maker is not None:
         print('making cacm index')
         stdout, stderr = idx_maker.communicate()
-        print(stderr)
-        print(stdout)
         rc = idx_maker.returncode
         if rc != 0:
             print('we had failure making the index for cacm')
@@ -50,27 +49,21 @@ def execute_queries(qresult_path=cacm_q_out_p, rel_outp=cacm_rel_out, num=10):
 
 
 def run_queries():
-    for requested in cacm_q_nums:
-        if requested != 10:
-            qresult_path = cacm_q_rnum_out % requested
-            rel_outp = cacm_rel_rnum_out % requested
-        else:
-            qresult_path = cacm_q_out_p
-            rel_outp = cacm_rel_out
-        execute_queries(qresult_path=qresult_path, rel_outp=rel_outp, num=requested)
+    qresult_path = cacm_q_out_p
+    rel_outp = cacm_rel_out
+    execute_queries(qresult_path=qresult_path, rel_outp=rel_outp, num=10)
 
 
 def eval_q_relevancej():
     transformer = ltransformer_group_by(lambda line: line.split(' ')[0])
     with RandFinderFile(cacm_q_out_p, transformer=transformer) as (num, qs):
         print('randomly selected query %s from the cam queries' % num)
-        # if not path_exists(selected_qs):
-        #     with AutoSaver(list, selected_qs, formatter=lambda qline: qline) as out:
-        #         out.extend(qs)
         query_results_pos = {}
+        doc_list = []
         print('the results for query %s are' % num)
         for qline in rand_select_stripper(qs):
             qn, q0, doc, pos, score = qline.split(' ')
+            doc_list.append(doc)
             print('%s @pos=%s' % (doc, pos))
             query_results_pos[doc] = pos, score
         transformer1 = rel_line_trans(0)
@@ -82,9 +75,8 @@ def eval_q_relevancej():
                 print('no relevant documents for query %s' % num)
             else:
                 print('\nquery %s has %d relevant documents' % (num, len(rel)))
-                avp_calc = []
-                avp_calcs = []
                 reciprocal_rank = None
+                reciprocal_ranks = None
                 rr_found = False
                 count = 1
                 for doc in rel:
@@ -94,20 +86,29 @@ def eval_q_relevancej():
                             ordinal(count), doc, it[0]))
                         if not rr_found:
                             reciprocal_rank = '%.2f' % (1 / int(it[0]))
+                            reciprocal_ranks = '1/%s' % it[0]
                             rr_found = True
-                        avp_calc.append(count / int(it[0]))
-                        avp_calcs.append('%d/%s' % (count, it[0]))
                         count += 1
+                calc_list = []
+                for ret_doc in doc_list:
+                    if ret_doc in rel:
+                        calc_list.append(1)
+                    else:
+                        calc_list.append(0)
+
                 print('\nthe relevance results for the query %s are' % num)
-                print('Average Precision (%s)/%.0f =' % (' + '.join(avp_calcs), float(rel_ret['num_rel'])),
-                      '%.2f' % (sum(avp_calc) / float(rel_ret['num_rel'])))
-                print('NDCG at 5:', rel_ret['ndcg5'])
-                print('NDCG at 10:', rel_ret['ndcg10'])
-                print('Precision at 10:', rel_ret['P10'])
-                print('Reciprocal Rank:', reciprocal_rank)
+                print('the binary representation of the runs returned documents is', calc_list)
+                print('Average Precision = %.2f' % average_precision(calc_list))
+                print('NDCG at 5 = %.2f' % ndcg_at_k(calc_list, 5))
+                print('NDCG at 10 = %.2f' % ndcg_at_k(calc_list, 10))
+                print('Precision at 10 = %.2f' % precision_at_k(calc_list, 10))
+                print('Reciprocal Rank %s =' % reciprocal_ranks, reciprocal_rank)
+                print('Galago NDCG at 5:', rel_ret['ndcg5'])
+                print('Galago NDCG at 10:', rel_ret['ndcg10'])
+                print('Galago Precision at 10:', rel_ret['P10'])
 
 
 if __name__ == '__main__':
-    # build_idx_qs()
-    # run_queries()
+    build_idx_qs()
+    run_queries()
     eval_q_relevancej()

@@ -1,5 +1,5 @@
 {
-  "queryType": "simple",
+  "index": "cacm_index",
   "queries": [
     {
       "text": "what articles exist which deal with tss  time sharing system   an operating system for ibm computers",
@@ -254,5 +254,5 @@
       "number": "63"
     }
   ],
-  "index": "cacm_index"
+  "queryType": "simple"
 }

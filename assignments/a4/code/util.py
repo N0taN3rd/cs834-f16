@@ -54,7 +54,6 @@ def galago_search(qpath, idxpath, requested=10, retpath=None):
         with open(retpath, 'w') as retOut:
             runner = run_galago(cline=cline, stdout=retOut)
             stdout, stderr = runner.communicate()
-            print(stderr)
             return runner.returncode
     else:
         return run_galago(cline=cline)

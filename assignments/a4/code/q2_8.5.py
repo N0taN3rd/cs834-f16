@@ -19,11 +19,6 @@ def select_rel_results_save(relp, csvp):
 
 
 if __name__ == '__main__':
-    for requested in cacm_q_nums:
-        print('generating the csv file for %d requested documents for all cacm queries' % requested)
-        csvp = cacm_all_rel_csv_reqnum % requested
-        if requested != 10:
-            relp = cacm_rel_rnum_out % requested
-        else:
-            relp = cacm_rel_out
-        select_rel_results_save(relp, csvp)
+    print('generating the csv file for 10 requested documents for all cacm queries')
+    select_rel_results_save(cacm_rel_out, cacm_all_rel_csv_reqnum % 10)
+

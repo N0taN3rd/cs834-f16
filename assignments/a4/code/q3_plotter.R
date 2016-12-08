@@ -6,6 +6,6 @@ metrics_all <- c('ndcg','R.prec','P500','ndcg5','ndcg1000','P30','ndcg10','p','P
 metrics <- c('ndcg','R.prec','ndcg5','ndcg10','P10','P5','map')
 scores <- read.csv('output_files/q3_rcompare_requested10.csv')
 scores <- melt(scores,id.vars = c('q'), measure.vars = metrics)
-ggplot(scores,aes(q,value,color=variable)) +geom_point(alpha = 0.3) +  geom_smooth(se=F) 
+ggplot(scores,aes(q,value,color=variable)) +geom_line(alpha = 0.3) +  geom_smooth(se=F) + labs(x = "Query", y='Score',color='Metric')
 
-
+ggsave('images/q3_plot.png')
