@@ -214,11 +214,12 @@ This is also evident when considering \autoref{fig:q2plot2} which plots the Reca
 \caption{Galago Eval Recall Precision For All Queries}
 \label{fig:q2plot2}
 \end{figure}
-The seemingly eradicate hills and valleys are present in both plots and when considering \autoref{fig:q2plot2} it becomes clear that the overall performance of the queries was poor due to the number of queries with NaN values which were replaces with 0.0 in order to be included in these graphs.  Now consider \autoref{fig:q2plot3} which shows the number of relevant documents for the CACM queries it clearly shows the reason behind the result. 19 queries have less than 10 relevant queries.
+The seemingly eradicate hills and valleys are present in both plots and when considering \autoref{fig:q2plot2} it becomes clear that the overall performance of the queries was poor due to the number of queries with NaN values and how galago considers all relevant documents in its metrics.  Now consider \autoref{tbl:lt10} which shows the queries with less than 10 relevant documents and \autoref{fig:q2plot3} showing the number of relevant documents for the all of the CACM queries. \autoref{fig:q2plot3} shows a relatively similar pattern as is seen in \autoref{fig:q2plot} and \autoref{fig:q2plot2}.  \autoref{tbl:lt10} shows 19 out of 64 queries which had relevant document counts less than 10. These queries further confirm my assumption that galago considers all relevant documents as  \autoref{fig:q2plot} and  \autoref{fig:q2plot2} start out at 1.0 which is perfect. Then a sharp drop as query 2 only had 3 relevant documents and then back up for query 5 which had 8.
 \begin{table}[ht]
-\centering
 \caption{Relevant Document $<$ 10 Count }
-\begin{tabular}{rr}
+\begin{minipage}{.5\linewidth}
+\centering
+       \begin{tabular}{rr}
   \hline
  Query & Count \\ 
   \hline
@@ -233,11 +234,10 @@ The seemingly eradicate hills and valleys are present in both plots and when con
 20 &   3 \\ 
    \hline
 \end{tabular}
-\end{table}
-\begin{table}[ht]
-\centering
-\caption{Relevant Document $<$ 10 Count }
-\begin{tabular}{rr}
+    \end{minipage}%
+    \centering
+    \begin{minipage}{.5\linewidth}
+       \begin{tabular}{rr}
   \hline
  Query & Count \\ 
   \hline
@@ -253,6 +253,8 @@ The seemingly eradicate hills and valleys are present in both plots and when con
   64 &   1 \\ 
    \hline
 \end{tabular}
+    \end{minipage} 
+\label{tbl:lt10}
 \end{table}
 
 \begin{figure}[H]
