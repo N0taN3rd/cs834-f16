@@ -1,0 +1,7 @@
+             precision    recall  f1-score   support
+
+     setosa       1.00      1.00      1.00        16
+ versicolor       0.91      0.87      0.89        23
+  virginica       0.86      0.90      0.88        21
+
+avg / total       0.92      0.92      0.92        60
