@@ -147,7 +147,7 @@ generate a ranking using Galago, and then calculate average precision, NDCG at 5
 and 10, precision at 10, and the reciprocal rank by hand.
 \end{verbatim}
 \subsection{Answer} 
-Like the previous assignments questions where galago was used to query a collection creation of the index and queries is the first step. This process was automated thanks to the lessons learned from having used galago before and the queries were supplied to us. Since the provided queries are in the old xml style they are converted to json after the index has been created.  The automation process can be seen in the python file \textbf{q1\_cacm\_query\_rel.py}, \autoref{code:q1} along with the rest of the code used in answering this question. Running the file \ibash{python3 q1_cacm_query_rel.py} for the first time will create the index, convert the queries and after the running the queries against the CACM collection execute the \textit{eval} function of galago against the runs results automatically. Subsequent executions of this file will not run the galago commands if the files produced by running this file are found to exist. The first time output generated can be seen in  \autoref{fig:cacmidx}.
+Like the previous assignments questions where galago was used to query a collection creation of the index and query creation is the first step. This process was automated thanks to the lessons learned from having used galago before and having the queries were supplied to us. Since the provided queries are in the old xml style they are converted to json after the index has been created.  The automation process can be seen in the python file \textbf{q1\_cacm\_query\_rel.py}, \autoref{code:q1} along with the rest of the code used in answering this question. Running the file \ibash{python3 q1_cacm_query_rel.py} for the first time will create the index, convert the queries and after the running the queries against the CACM collection execute the \textit{eval} function of galago against the runs results automatically. Subsequent executions of this file will not run the galago commands if the files produced by running this file are found to exist. The first time output generated can be seen in  \autoref{fig:cacmidx}.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.7]{q1buildidx.png}
@@ -199,12 +199,67 @@ Generate the mean average precision, recall-precision graph, average NDCG
 at 5 and 10, and precision at 10 for the entire CACM query set
 \end{verbatim}
 \subsection{Answer} 
-The values used in the graph for this question were retrieved from the results generated from \textit{eval} function used in \autoref{q1} and then saved to a csv file \autoref{code:q2py} for plotting via R \autoref{code:q2r} which produced the plot seen in \autoref{fig:q2plot}. It must be noted that the R-Precision was not asked for by this question but was included as the R values corresponds to the number of relevant documents for a query which was noted as evident when comparing the computed metrics to galagos in \autoref{q1}.
+The values used in the graph for this question were retrieved from the results generated from \textit{eval} function used in \autoref{q1} and then saved to a csv file \autoref{code:q2py} for plotting via R \autoref{code:q2r}. It must be noted that the R-Precision (color red) was not asked for by this question but was included as the R values corresponds to the number of returned documents for a query. This was to done in attempt to confirm my suspicions about how galago computes the internally as noted in \autoref{q1}. and to provide an baseline by which the other metrics can be compared to.
+ \autoref{fig:q2plot} shows the metrics plotted against each and it is clear to see that results follow a similar pattern.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.9]{q2_plot.png}
-\caption{Plot}
+\caption{Galago Eval Metrics For All Queries}
 \label{fig:q2plot}
+\end{figure}
+This is also evident when considering \autoref{fig:q2plot2} which plots the Recall and Precision scores for each query as calculated by galago. 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.9]{q2_plot_rp.png}
+\caption{Galago Eval Recall Precision For All Queries}
+\label{fig:q2plot2}
+\end{figure}
+The seemingly eradicate hills and valleys are present in both plots and when considering \autoref{fig:q2plot2} it becomes clear that the overall performance of the queries was poor due to the number of queries with NaN values which were replaces with 0.0 in order to be included in these graphs.  Now consider \autoref{fig:q2plot3} which shows the number of relevant documents for the CACM queries it clearly shows the reason behind the result. 19 queries have less than 10 relevant queries.
+\begin{table}[ht]
+\centering
+\caption{Relevant Document $<$ 10 Count }
+\begin{tabular}{rr}
+  \hline
+ Query & Count \\ 
+  \hline
+ 1 &   5 \\ 
+2 &   3 \\ 
+  3 &   6 \\ 
+  5 &   8 \\ 
+   6 &   3 \\ 
+   8 &   3 \\ 
+  9 &   9 \\ 
+  12 &   5 \\ 
+20 &   3 \\ 
+   \hline
+\end{tabular}
+\end{table}
+\begin{table}[ht]
+\centering
+\caption{Relevant Document $<$ 10 Count }
+\begin{tabular}{rr}
+  \hline
+ Query & Count \\ 
+  \hline
+23 &   4 \\ 
+  28 &   5 \\ 
+   30 &   4 \\ 
+31 &   2 \\ 
+  32 &   3 \\ 
+  33 &   1 \\ 
+  49 &   8 \\ 
+  57 &   1 \\ 
+   62 &   8 \\ 
+  64 &   1 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.9]{q2_plot_rc.png}
+\caption{Relevant Document Count For CACM Queries}
+\label{fig:q2plot3}
 \end{figure}
 \begin{code}
 \captionof{listing}{Graph Data File Generator} 
