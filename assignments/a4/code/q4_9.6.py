@@ -137,14 +137,15 @@ def plot_classification():
     plt.close()
 
 
-def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues,showC=True):
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
     """
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title)
-    plt.colorbar()
+    if showC:
+        plt.colorbar()
     tick_marks = np.arange(len(classes))
     plt.xticks(tick_marks, classes, rotation=45)
     plt.yticks(tick_marks, classes)
@@ -208,7 +209,7 @@ def evaluation():
     # Plot normalized confusion matrix
     plt.figure()
     plot_confusion_matrix(cnf_matrix, classes=class_names, normalize=True,
-                          title='SVM One-vs-All Confusion Matrix')
+                          title='SVM One-vs-All Confusion Matrix',showC=False)
 
     plt.tight_layout()
     plt.savefig('images/svm_linear_1va_cm.png')

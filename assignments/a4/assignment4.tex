@@ -138,7 +138,7 @@ mathescape=true
 
 The BeautifulSoupFromFile classes takes the path to a file plus the parser type used when creating the soup i.e html or xml and returns to the context using it the soup produced from opening the file and creating a new BeautifulSoup. AutoSaver and AutoSaveCsv takes the type to be save (python list or dictionary) with the path to the file to be written and returns to the calling context an empty version of the type specified to be populated in the scope of that context finally saving the types content to the file path when the context is exited. They also take optional arguments of functions which are used to format the output and or select what entities in they save type to be written to file. RunCommandSaveOut classes takes a function producing a \ipy{subprocess.Popopen} class, the command line arguments to pass to the function and supplies the function with a file object by which the standard output of the spawned process is serialized to. CleanFileLines class reads the contents of a specified file and applies a cleaning function to the contents (for example: $f(``A,B,C,X,Y,Z\escape{n}") \to ``A,B,C"$ ) returning to the context the cleaned lines with the option to save the cleaned lines back to the originating file. FileLinePrinter operates similarly but only prints the raw lines of the specified files. SelectFromFile also applies a transformation function to the files content but also applies a selector function to the cleaned contents of the file returning to the context only what is produced  after applying it to the files contents. RandFinderFile operates similarly but the selection function supplied is to randomly select a line from the files content which is then returned to the context.  \newline   \newline  
 
-The other functions used in answering the questions in this assignment follow the convention of the previous assignments defining less intensive helpers in the file util.py seen in \autoref{code:util}.  Also the shell script created to run galago commands in assignment 3 \autoref{code:rungal} was also utilized with the eval argument which sets up the correct command line arguments to run the galago function eval as the  default options for this do not return results required for this assignment. A more specialized utility file was created for use with the context classes described previously for use with the output of galago functions especially for sanatizing the output of the query runs to work with the eval function of galago. These functions can be seen in \autoref{code:cacm_help}.  \newline \newline Finally it must also be noted that I will be using an updated version of galago (v3.10) in this report. For a more detailed explanation as to why and the differences in this version from the one used by the textbook please consult this same section in the report for assignment 3 for more details.
+The other functions used in answering the questions in this assignment follow the convention of the previous assignments defining less intensive helpers in the file util.py seen in \autoref{code:util}.  Also the shell script created to run galago commands in assignment 3 \autoref{code:rungal} was also utilized with the eval argument which sets up the correct command line arguments to run the galago function eval as the  default options for this do not return results required for this assignment. It explicitly asks for all available metrics to be computed the full list of metrics can be seen in \autoref{code:rungal}. A more specialized utility file was created for use with the context classes described previously for use with the output of galago functions especially for sanatizing the output of the query runs to work with the eval function of galago. These functions can be seen in \autoref{code:cacm_help}.  \newline \newline Finally it must also be noted that I will be using an updated version of galago (v3.10) in this report. For a more detailed explanation as to why and the differences in this version from the one used by the textbook please consult this same section in the report for assignment 3 for more details.
 \newpage
 \section{Question 8.3} \label{q1}
 \begin{verbatim}
@@ -199,15 +199,14 @@ Generate the mean average precision, recall-precision graph, average NDCG
 at 5 and 10, and precision at 10 for the entire CACM query set
 \end{verbatim}
 \subsection{Answer} 
-The values used in the graph for this question were retrieved from the results generated from \textit{eval} function used in \autoref{q1} and then saved to a csv file \autoref{code:q2py} for plotting via R \autoref{code:q2r}. It must be noted that the R-Precision (color red) was not asked for by this question but was included as the R values corresponds to the number of returned documents for a query. This was to done in attempt to confirm my suspicions about how galago computes the internally as noted in \autoref{q1}. and to provide an baseline by which the other metrics can be compared to.
- \autoref{fig:q2plot} shows the metrics plotted against each and it is clear to see that results follow a similar pattern.
+The values used in the graph for this question were retrieved from the results generated from \textit{eval} function used in \autoref{q1} and then saved to a csv file \autoref{code:q2py} for plotting via R \autoref{code:q2r}.  \autoref{fig:q2plot} shows the metrics plotted against each and it is clear to see that results follow a similar pattern. This plot also brings up the question of does galago consider the entire relevant document for a query in these calculations as was noted in \autoref{q1}. 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.9]{q2_plot.png}
 \caption{Galago Eval Metrics For All Queries}
 \label{fig:q2plot}
 \end{figure}
-This is also evident when considering \autoref{fig:q2plot2} which plots the Recall and Precision scores for each query as calculated by galago. 
+Considering \autoref{fig:q2plot2} which plots the Recall and Precision scores for each query as calculated by galago, they as well follow the pattern seen in \autoref{fig:q2plot}.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.9]{q2_plot_rp.png}
@@ -276,15 +275,92 @@ The seemingly eradicate hills and valleys are present in both plots and when con
 \newpage
 \section{Question 8.7} \label{q3}
 \begin{verbatim}
-Something something comparing
+Another measure that has been used in a number of evaluations is R-precision.
+This is defined as the precision at R documents, where R is the number of relevant
+documents for a query. It is used in situations where there is a large variation in
+the number of relevant documents per query. Calculate the average R-precision
+for the CACM query set and compare it to the other measures.
 \end{verbatim}
 \subsection{Answer} 
+Since galago computes the relevance metrics considering all relevant documents it is clear that the R-precision is one of the few metrics that would give an accurate results for all queries. This is due to it having the nice property of the R parameter which is the number of documents in the result set of a query which would be ten in this case.  The code used to generate the data and the graphs can be seen in \autoref{code:q3} and \autoref{code:q3p}. As a more in depth look at what would be causing the graph to behave as it does was done in \autoref{q2} my answer for this question will be more general. \autoref{fig:q3plot} shows the graph comparing R-Precision to the other metrics with loess smoothing applied in order to better compare these metrics. Also shown in this plot are all values for these metrics in the background in order to show the need for the smoothing as without it a comparison would be hard.  \newline \newline 
+As was seen in the plots for \autoref{q2} the R-Precisions follows the same trend of dipping where the queries had below ten relevant documents or NaN values were computed. Unlike the other methods R-Precision appears to have less of a dramatic increase or decrease in its values. 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.9]{q3_plot.png}
-\caption{....}
+\caption{R-precision Comparison}
 \label{fig:q3plot}
 \end{figure}
+Now to gain a better understanding of what is actually happening consider which show the r values at 20 and 100 respectively.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{q3_plot_r20.png}
+\caption{R-precision Comparison r=20} 
+\label{fig:q3plot_r20}
+\end{figure}
+At r=20, \autoref{fig:q3plot_r20}, the R-Precision increases to be on par with MAP and the P20 is mirrored in compairison to \autoref{fig:q3plot}. The ndcg20 value is greater than the overall ndcg for all queries which would be expected but why that is so will at the end of this section. At r=100, \autoref{fig:q3plot_r100}, R-Precision and MAP show only a marginal increase but NDGC100 has the largest increase overall whereas P100 is almost 0. 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{q3_plot_r100.png}
+\caption{R-precision Comparison r=100}
+\label{fig:q3plot_r100}
+\end{figure}
+The only explanation for this can be found in the number of relevant documents greater than or equal to ten according to the \textit{cam.rel} file. \autoref{tbl:gt10} shows these numbers and from the previous discussion about how galago computes these metrics it is clear to see that all relevant documents are taken into consideration for these scores. 
+\begin{table}[H]
+\caption{Relevant Document $>=$ 10 Count }
+\begin{minipage}{.5\linewidth}
+\centering
+       \begin{tabular}{rr}
+  \hline
+ Query & Count \\ 
+  \hline
+4 &  12 \\ 
+   7 &  28 \\ 
+  10 &  35 \\ 
+  11 &  19 \\ 
+  13 &  11 \\ 
+  14 &  44 \\ 
+  15 &  10 \\ 
+  16 &  17 \\ 
+  17 &  16 \\ 
+  18 &  11 \\ 
+  19 &  11 \\ 
+  21 &  11 \\ 
+  22 &  17 \\ 
+  24 &  13 \\ 
+  25 &  51 \\ 
+  26 &  30 \\ 
+  27 &  29 \\ 
+   \hline
+\end{tabular}
+    \end{minipage}%
+    \centering
+    \begin{minipage}{.5\linewidth}
+       \begin{tabular}{rr}
+  \hline
+ Query & Count \\ 
+  \hline
+    29 &  19 \\ 
+  36 &  20 \\ 
+  37 &  12 \\ 
+ 38 &  16 \\ 
+  39 &  12 \\ 
+  40 &  10 \\ 
+  42 &  21 \\ 
+  43 &  41 \\ 
+  44 &  17 \\ 
+  45 &  26 \\ 
+  48 &  12 \\ 
+  58 &  30 \\ 
+  59 &  43 \\ 
+  60 &  27 \\ 
+  61 &  31 \\ 
+  63 &  12 \\ 
+   \hline
+\end{tabular}
+    \end{minipage} 
+\label{tbl:gt10}
+\end{table}
+
 \begin{code}
 \captionof{listing}{Plot data Gen} 
 \label{code:q3}
@@ -298,22 +374,39 @@ Something something comparing
 \newpage
 \section{Question 9.6} \label{q4}
 \begin{verbatim}
-Something something comparing
+Compare the accuracy of a one versus all SVM classifier and a one versus
+one SVM classifier on a multiclass classification data set. Discuss any differences
+observed in terms of the efficiency and effectiveness of the two approaches.
 \end{verbatim}
+\subsection{Answer} 
+This questions answer follows the example for SVMs on scikit-learns \href{http://scikit-learn.org/stable/auto_examples/svm/plot_iris.html}{website} as it provides a python interface for both liblinear and libsvm. Dataset used is the publicly available iris dataset which comes packaged with sciki-learn. The code used for this question can be seen in \autoref{code:q4} and uses two different linear SVM implementations SVC(libsvm) and LinearSVC(liblinear). The SVC or SVM class C utilizes a one-vs-one for multiclass and LinearSVC a one-vs-all for multiclass. Also in order to ensure these svm implementations did the correct one-vs-one and one-vs-all classification on the iris dataset they were wrapped in a multiclass classification strategy helper  for the respective one-vs-x classification. \newline \newline
+\autoref{fig:q5svms} shows the partitioning done by the classifiers on the iris dataset where the color represent the iris type. The one-vs-one strategy created partitions that encompassed the iris types evenly whereas the one-vs-all strategy took more from the light blue iris type. Also one-vs-all did not include the single dark blue iris type in its true class rather classified it as light blue.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.7]{svm_linear_1v1_1va.png}
+\caption{1v1 and 1vAll Classification Comparison}
+\label{fig:q5svms}
+\end{figure}
+ \autoref{fig:svm_cm}  shows the confusion matrix for the one-vs-one strategy and the color represents the number of iris types classified for a label. As shown in the confusion matrices the one vs one strategy did marginally better than the one vs all strategy for versicolor. \autoref{tbl:ovo} which shows the classification report for one-vs-one and \autoref{tbl:ova} shows the classification report for one-vs-all also reflect that one-vs-one performed better. The support for both strategies are the same which leads me to conclude that using one-vs-one vs one-vs-all depends on the classification task at hand. This toy example highlighted the one-vs-one performance gains as the iris types are distributed close together for the outliers that when using the one-vs-all  strategy it would  pick up on this and wrongly classify iris types when they are extremely close together.
 
 \begin{figure}[H]
 \centering
-\includegraphics{svm_linear_1v1_1va.png}
-\caption{....}
-\label{fig:q5svms}
+\hspace*{-2cm} 
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1.2\linewidth]{svm_linear_1va_cm.png}
+   \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1.2\linewidth]{svm_linear_1v1_cm.png}
+   \label{fig:sub2}
+\end{subfigure}
+\caption{Classification Strategy Confusion Matrices}
+\label{fig:svm_cm}
 \end{figure}
-\begin{figure}[H]
-\centering
-\includegraphics{svm_linear_1v1_cm.png}
-\caption{....}
-\label{fig:q5_1v1}
-\end{figure}
-\begin{table}[ht]
+
+\begin{table}[H]
 \centering
 \begin{tabular}{c | c c c c}
 Class & Precision & Recall & F-score & Support\\
@@ -324,16 +417,10 @@ versicolor & 0.96 & 0.96 & 0.96 & 23\\
 virginica & 0.95 & 0.95 & 0.95 & 21\\
 avg & 0.97 & 0.97 & 0.97 & 60\\
 \end{tabular}
+\caption{Classification Report for One-vs-One}
+\label{tbl:ovo}
 \end{table}
-
-
-\begin{figure}[H]
-\centering
-\includegraphics{svm_linear_1va_cm.png}
-\caption{....}
-\label{fig:q5_1va}
-\end{figure}
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \begin{tabular}{c | c c c c}
 Class & Precision & Recall & F-score & Support\\
@@ -344,6 +431,8 @@ versicolor & 0.91 & 0.87 & 0.89 & 23\\
 virginica & 0.86 & 0.9 & 0.88 & 21\\
 avg & 0.92 & 0.92 & 0.92 & 60\\
 \end{tabular}
+\caption{Classification Report for One-vs-All}
+\label{tbl:ova}
 \end{table}
 \begin{code}
 \captionof{listing}{svm code} 
@@ -353,15 +442,35 @@ avg & 0.92 & 0.92 & 0.92 & 60\\
 \newpage
 \section{Question 9.8} \label{q5}
 \begin{verbatim}
-Something something comparing
+Use K-means and spherical K-means to cluster the data points in Exercise
+9.8. How do the clusterings differ?
 \end{verbatim}
-\begin{code}
+\subsection{Answer} 
+Scikit learn was also used to answer this question as well as an extension of its kmeans class SphericalKMeans provided by spherecluster which extends scikit learns version to do the sphericalkmeans. 
+The points from $9.8$ are $(-4, -2), (-3, -2), (-2, -2), (-1, -2), (1, -1), (1, 1), (2, 3), (3, 2), (3, 4), (4, 3)$ and the code used to answer this question can be seen in \autoref{code:q5}.  The k value chosen was 3 due to the sparse nature of the points which can be seen in \autoref{fig:q5plot}. \autoref{fig:kmeansiter} which shows the kmeans algorithm after the first iteration and \autoref{fig:kmeansfull} shows the kmeans algorithm after running to completion. The biggest difference seen in \autoref{fig:q5plot} is how the centroids are placed even after the first iteration. Kmeans drops the points directly in the middle of the clusters whereas sphericalkmeans puts them in the middle and works outwards in a spiral.  I believe this is happening due to the n\_init parameter which runs the algorithm with n different initial seeds after which it chooses the best.
+
 \begin{figure}[H]
 \centering
-\includegraphics{kmeans_vs_sphericalkmean.png}
-\caption{....}
+\hspace*{-3cm} 
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1.2\linewidth]{kmeans_vs_sphericalkmean_iter.png}
+   \caption{One Iteration}
+   \label{fig:kmeansiter}
+\end{subfigure}%
+\hspace*{1cm} 
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1.2\linewidth]{kmeans_vs_sphericalkmean.png}
+  \caption{Run To Completion}
+   \label{fig:kmeansfull}
+\end{subfigure}
+\vspace{1cm}
+\caption{Classification Strategy Confusion Matrices}
 \label{fig:q5plot}
 \end{figure}
+
+\begin{code}
 \captionof{listing}{kmeans code} 
 \label{code:q5}
 	\pycode{code/q5_9.8.py}
