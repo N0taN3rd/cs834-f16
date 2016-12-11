@@ -1,0 +1,13 @@
+\begin{tabular}{rrrrr}
+\hline
+   Iteration &   Node &   Hub Score &   Authority Score &   PageRank \\
+\hline
+           2 &      1 &        0    &              0.31 &       0.24 \\
+           2 &      2 &        0.2  &              0    &       0.07 \\
+           2 &      3 &        0.45 &              0    &       0.07 \\
+           2 &      4 &        0.2  &              0    &       0.07 \\
+           2 &      5 &        0.14 &              0.24 &       0.11 \\
+           2 &      6 &        0    &              0.45 &       0.36 \\
+           2 &      7 &        0    &              0    &       0.07 \\
+\hline
+\end{tabular}
