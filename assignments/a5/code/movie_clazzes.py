@@ -10,8 +10,11 @@ usr_review_file = 'data/ml-100k/u.data'
 movie_f = 'data/ml-100k/u.item'
 
 usr_pickle = 'pickled/movie_user.pickle'
+usr_pickle2 = 'pickled/movie_user2.pickle'
 usr_review_pickle = 'pickled/movie_user_review.pickle'
+usr_review_pickle2 = 'pickled/movie_user_review2.pickle'
 movie_pickle = 'pickled/movie_movies.pickle'
+movie_pickle2 = 'pickled/movie_movies2.pickle'
 
 usr_split = re.compile('\\|')
 usr_ratting = re.compile('\s+')
@@ -19,7 +22,7 @@ msanity = re.compile('[|]+')
 msplit = re.compile('\\|')
 
 
-class User:
+class User(object):
     def __init__(self, splitted, reviews=None):
         self.id = int(splitted[0])
         self.age = int(splitted[1])
@@ -48,7 +51,86 @@ class User:
         return self.__str__()
 
 
-class URating:
+class UserWReviews(object):
+    def __init__(self, **kwargs):
+        split = kwargs.get('split', None)
+        uwr = kwargs.get('UserWReviews', None)
+        if split is not None:
+            mset = kwargs.get('mset')
+            user_reviews = kwargs.get('ureviews')
+            self.id = int(split[0])
+            self.age = int(split[1])
+            self.gender = split[2]
+            self.job = split[3]
+            self.zcode = split[4]
+            self.reviews = []
+            self.review_vector = []
+            cur_urevs = user_reviews[self.id]
+            review_ids = set(map(lambda mr: mr.itemid, cur_urevs))
+            dont_have = mset - review_ids
+            for _ in dont_have:
+                self.review_vector.append(0)
+            for reviewd in cur_urevs:
+                self.reviews.append(reviewd)
+                self.review_vector.append(reviewd.rating)
+        else:
+            self.id = uwr.id
+            self.age = uwr.age
+            self.gender = uwr.gender
+            self.job = uwr.job
+            self.zcode = uwr.zcode
+            self.reviews = list(uwr.reviews)
+
+    def get_review_vector(self):
+        return self.review_vector
+
+    def check(self, age, gender, job):
+        if self.age == age:
+            if self.gender == gender:
+                if self.job == job:
+                    return True
+        return False
+
+    def __str__(self):
+        return "id: %d, age: %d, gender: %s, job: %s, reviewed: %d" % (
+            self.id, self.age, self.gender, self.job, len(self.reviews))
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class UserReview(object):
+    def __init__(self, **kwargs):
+        split = kwargs.get('split')
+        ur = kwargs.get('UserReview')
+        if split is not None:
+            self.uid = int(split[0])
+            self.itemid = int(split[1])
+            self.rating = int(split[2])
+        elif ur is not None:
+            self.uid = ur.uid
+            self.itemid = ur.itemid
+            self.rating = ur.rating
+        else:
+            self.uid = kwargs.get('uid')
+            self.itemid = kwargs.get('itemid')
+            self.rating = kwargs.get('rating')
+
+    def __eq__(self, other):
+        if not isinstance(other, UserReview):
+            return False
+        else:
+            return self.uid == other.uid and self.itemid == other.itemid
+
+    def __str__(self):
+        return "uid: %d, itemid: %d, rating: %d" % (
+            self.uid, self.itemid, self.rating)
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class URating(object):
     def __init__(self, split):
         self.uid = int(split[0])
         self.mname = None
@@ -70,7 +152,7 @@ class URating:
         return self.__str__()
 
 
-class Movie:
+class Movie(object):
     def __init__(self, split):
         length = len(split)
         if length < 24:
@@ -124,6 +206,37 @@ def get_users(reviews=None):
     return usrs
 
 
+def get_users2(ureviews, mset):
+    if not os.path.exists(usr_pickle2):
+        def user_trans(lines):
+            return map(lambda line: UserWReviews(split=usr_split.split(line), ureviews=ureviews, mset=mset), lines)
+
+        with SelectFromFile(user_file, transformer=user_trans, selector=lambda x: list(x)) as it:
+            usrs = it
+        dump_pickle(usrs, usr_pickle2)
+    else:
+        usrs = read_pickle(usr_pickle2)
+    return usrs
+
+
+def get_reviews2():
+    if not os.path.exists(usr_review_pickle2):
+        def review_mapper(line):
+            ur = UserReview(split=usr_ratting.split(line.rstrip()))
+            return ur
+
+        def trans(rvs):
+            return seq(rvs).map(review_mapper).group_by(lambda ur: ur.uid).to_dict()
+
+        with SelectFromFile(usr_review_file, transformer=trans, selector=lambda x: x) as r:
+            reviews = r
+        dump_pickle(reviews, usr_review_pickle2)
+    else:
+        reviews = read_pickle(usr_review_pickle2)
+
+    return reviews
+
+
 def get_reviews(movie_map):
     if not os.path.exists(usr_review_pickle):
         def review_mapper(line):
@@ -158,8 +271,32 @@ def get_movies():
     return movie_map
 
 
+def get_movies2():
+    if not os.path.exists(movie_pickle2):
+        def move_clean_split(line):
+            return Movie(msplit.split(msanity.sub('|', line.rstrip())))
+
+        movies = []
+        movie_idx = {}
+        with codecs.open(movie_f, 'r', encoding='utf-8', errors='replace') as movs:
+            for idx, mov in enumerate(map(move_clean_split, movs)):
+                movies.append(mov)
+                movie_idx[mov.mid] = idx
+        dump_pickle((movies, movie_idx), movie_pickle2)
+    else:
+        movies, movie_idx = read_pickle(movie_pickle2)
+    return movies, movie_idx
+
+
 def get_movie_data():
     movies = get_movies()
     reviews = get_reviews(movies)
     users = get_users(reviews)
     return users, reviews, movies
+
+
+def get_movie_data2():
+    movies, movie_idx = get_movies2()
+    reviews = get_reviews2()
+    users = get_users2(reviews, set(movie_idx.keys()))
+    return users, reviews, movies, movie_idx

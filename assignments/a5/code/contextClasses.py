@@ -1,4 +1,5 @@
 import csv
+import pickle
 import networkx as nx
 from bs4 import BeautifulSoup
 from functional import seq
