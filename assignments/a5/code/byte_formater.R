@@ -1,3 +1,6 @@
+# unmerged pr to the scales repo 
+# https://github.com/hrbrmstr/scales/blob/b27b8acefe4188ede47d9cf479c383ce1b35405c/R/formatter.r
+
 byte_format <- function(symbol="auto", units="binary") {
   function(x) bytes(x, symbol, units)
 }

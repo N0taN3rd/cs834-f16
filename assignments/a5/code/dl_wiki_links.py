@@ -4,7 +4,6 @@ from requests_futures.sessions import FuturesSession
 import requests
 import re
 
-
 useragents = [
     'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:44.0) Gecko/20100101 Firefox/44.01',
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36',
@@ -12,14 +11,10 @@ useragents = [
 ]
 
 
-if __name__ == '__main__':
-    link_df = get_link_df()  # & ~link_df.href.str.contains('pdf')
-    # check_webarchive(link_df)
+def dl_wiki_links():
+    link_df = get_link_df()
     di = domain_info(link_df)
-    chunk_c = 1
-    c = 0
     result = {}
-    chunks = []
     temp = []
     num = re.compile('^(?:(?:www\.)|(?:http://)|(?:https://))?(?:[0-9]{1,3}\.){3}.+$')
     c = 0
@@ -47,7 +42,7 @@ if __name__ == '__main__':
                         scode = response.status_code
                         result[url] = scode
                     except Exception as e:
-                         one = 1
+                        one = 1
                     processed += 1
                     if processed % 1000 == 0:
                         print(processed)

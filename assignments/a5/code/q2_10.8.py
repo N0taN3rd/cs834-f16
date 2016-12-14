@@ -1,9 +1,8 @@
-from collections import defaultdict
-from random import sample
 import numpy as np
 import math
 import pandas as pd
 import os
+from collections import defaultdict
 from contextClasses import AutoSaveCsv
 from q2_helpers import get_review_df, get_reviewer_sim, get_movies_df
 from util import dump_pickle, read_pickle
@@ -126,11 +125,6 @@ def predict(method='pearson_seq', k=10):
         return read_pickle(want)
 
 
-def iter_pred(prs):
-    for pr in prs:
-        yield pr['pred'], pr['act']
-
-
 def gen_mse_prdr_csv(k=10):
     mse_headers = ['user', 'mse', 'which']
     pre_headers = ['user', 'mid', 'mtitle', 'score', 'which']
@@ -181,5 +175,7 @@ def gen_mse_prdr_csv(k=10):
 
 
 if __name__ == '__main__':
-    # predict_rated(method='euclid')
+    r_df = get_review_df()
+    m_df = get_movies_df()
+    rsim_df = get_reviewer_sim(r_df)
     gen_mse_prdr_csv()

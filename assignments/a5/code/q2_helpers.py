@@ -4,7 +4,6 @@ import networkx as nx
 import multiprocessing
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
 from itertools import repeat
 from sklearn.metrics import pairwise_distances_argmin
 from sklearn.cluster import KMeans
