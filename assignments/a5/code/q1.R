@@ -19,9 +19,7 @@ for (i in 1:network.size(net)) {
 
 # https://briatte.github.io/ggnetwork/#geom_nodetext_repel-and-geom_nodelabel_repel
 
-ggnetwork(net,label=T,arrow.size = 12, arrow.gap = 0.025) +
-  geom_nodelabel_repel(aes(color = family, label = it),
-                       fontface = "bold", box.padding = unit(1, "lines"))
+ggnet2(net,label=T,arrow.size = 12, arrow.gap = 0.025,label = c('HubScore PageRank')) 
 
 
 # for(i in 1:5){

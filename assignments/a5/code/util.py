@@ -4,6 +4,7 @@ from fs.osfs import OSFS
 wsmall = 'pickled/wsmall.pickle'
 wsmalln = 'pickled/wsmall_new.pickle'
 
+
 def dump_pickle(obj, file):
     with open(file, 'wb') as out:
         pickle.dump(obj, out)
@@ -23,6 +24,7 @@ def pick_file_list():
         small_set.add(file[file.rfind('/') + 1:])
     dump_pickle((small_list, small_set), 'pickled/wsmall.pickle')
     ws.close()
+
 
 if __name__ == '__main__':
     pick_file_list()
