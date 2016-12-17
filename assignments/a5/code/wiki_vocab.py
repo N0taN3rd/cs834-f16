@@ -1,10 +1,11 @@
 import re
 import random
-from util import wsmall,wsmalln, read_pickle, dump_pickle
+import string
+from util import wsmall, wsmalln, read_pickle, dump_pickle
 from bs4 import BeautifulSoup
 from nltk.tokenize import WordPunctTokenizer
 
-no_wspace_punk = re.compile('(?:\s+)|[%s]' % re.escape("""!"#$%&()*+,./:;<=>?@[\]^_{|}~"""))
+no_wspace_punk = re.compile('(?:\s+)|[%s]' % string.punctuation)
 
 
 def vocab(wfile, outfile):
@@ -79,5 +80,5 @@ def vocab_small():
 
 def vocab_small_new():
     vocab(wsmalln, 'output_files/wsmall-vocabn.csv')
-    vocab_backwards(wsmalln , 'output_files/wsmall-vocabBn.csv')
-    vocab_random(wsmalln , 'output_files/wsmall-vocabRn.csv')
+    vocab_backwards(wsmalln, 'output_files/wsmall-vocabBn.csv')
+    vocab_random(wsmalln, 'output_files/wsmall-vocabRn.csv')

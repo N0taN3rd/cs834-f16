@@ -322,8 +322,29 @@ Does your favorite web search engine use a bag of words representation?
 How can you tell whether it does or doesn’t?
 \end{verbatim}
 \subsection*{Answer} 
-Unlike the vast majority of the world my favorite search engine is \href{https://duckduckgo.com}{duckduckgo.com} because that's so met\anarchy{}l but in all seriousness I like it because it is a \href{https://duckduckgo.com/about}{privacy} first search engine.
-\newpage
+Unlike the vast majority of the world my favorite search engine is \href{https://duckduckgo.com}{duckduckgo.com} because that's so met\anarchy{}l but in all seriousness I like it because it is a \href{https://duckduckgo.com/about}{privacy} first search engine and the \href{https://www.eff.org/deeplinks/2010/10/search-engines-protect-privacy-outbound-https}{EFF} likes them. All right consider the following query seen in \autoref{fig:q4_pv}. 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{duckduckgo_pv.png}
+\caption{Powerviolence Query}
+\label{fig:q4_pv}
+\end{figure}
+The top three results, along with the others returned by this query, are about the best subgenre of punk powerviolence (pv). I purposely did not use the proper form of pv, as a single word, because in bag of words both \enquote{power} and \enquote{violence} would be in the \enquote{bag} when applying this retrieval model to build the result set. To better understand this consider the following two documents:
+\begin{description}
+\item[Doc1] Powerviolence (sometimes written as power violence) is a raw and dissonant subgenre of hardcore punk.
+\item[Doc2] The violence today at the power plant was extreme
+\end{description}
+In the bag of words model the two documents would be transformed into: \newline \newline
+[\enquote{Powerviolence}, \enquote{sometimes}, \enquote{written}, \enquote{as}, \enquote{power}, \enquote{violence}, \enquote{is}, \enquote{a}, \enquote{raw}, \enquote{and}, \enquote{dissonant}, \enquote{subgenre}, \enquote{of}, \enquote{hardcore}, \enquote{punk}, \enquote{The}, \enquote{violence}, \enquote{today}, \enquote{at}, \enquote{the}, \enquote{power}, \enquote{plant}, \enquote{was}, \enquote{extreme}] \newline \newline
+Because of this my query would have \textbf{Doc2} returned in the result set which is not desired. To further test this I issued the query \textit{violence power} and the results can be seen in \autoref{fig:q4_vp}.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{duckduckgo_vp.png}
+\caption{Violence  Power Query}
+\label{fig:q4_vp}
+\end{figure}
+The top three results for this query do not have anything to do about this subgenre of punk rather the typical expectation for this combination words was returned. But the Wikipedia article for powerviolence was at position ten of the result set with all other results not about powerviolence.
+\clearpage
 \section{Extra Credit Wiki Small} \label{q5}
 \begin{verbatim}
 Turn in with A5, 8 points available. Download the wikipedia.org URIs from the live web.
@@ -353,7 +374,198 @@ compare the 2008 vs. 2015 snapshots in: (2pts)
 • total terms
 • total unique terms
 \end{verbatim}
-\subsection{Answer} 
+\section*{Note}
+All http requests made while answering this question had a maximum timeout of 5 seconds this was to ensure that a lone url would not hold up the parallelization used to speed up the processing. The main code for this can be seen in \autoref{code:wsmall}, its helper file \autoref{code:wsmall_help}, the vocab code \autoref{code:wsmall_vocab} and the R code used to generate the graphs \autoref{code:wsmall_plotter}. 
+\subsection*{Wiki Small Statuses} 
+% web.archive 4 timeouts
+The statuses for the 6043 documents can be seen in \autoref{tbl:ws_http}. 
+\begin{table}[H]
+	\caption{Wiki Small Live Web Counterparts Http Statuses}
+	\label{tbl:ws_http}
+	\centering
+\begin{tabular}{lr}
+\hline
+status & count \\
+\hline
+200 &  5800\\
+404 &  243\\
+\hline
+\end{tabular}
+\end{table}
+\noindent As seen in this table the page was either existing or non-existing, those that were not deemed not existing could not be retrieved using the wiki file name (after sensitization) appended to  the following url https://en.wikipedia.org/wiki/. On looking up the pages on wikipedia itself some could be found again but the page url had changed but the majority of them had new pages containing the key words from the original. For example Saint-Hilaire\_Lange\_National\_Park now resides at Saint-Hilaire/Lange\_National\_Park, Humans\_United\_Against\_Robots has been merged into the page Keith and The Girl \autoref{fig:ws_l4041} and the Lakshmana\_Swamy page has been renamed to A. Lakshmanaswami Mudaliar but the original pages terms show up in multiple other pages \autoref{fig:ws_l4042}.
+\begin{figure}[H]
+\centering
+     \adjustbox{trim={0} {0} {6in} {0},clip}%
+{\includegraphics[scale=0.8]{wsmall_live2_404.png}}
+\caption{Wsmall 404  Humans\_United\_Against\_Robots}
+\label{fig:ws_l4041}
+\end{figure}
+\begin{figure}[H]
+\centering
+     \adjustbox{trim={0} {0} {6in} {0},clip}%
+{\includegraphics[scale=0.8]{wsmall_live_404.png}}
+\caption{Wsmall 404  Lakshmana\_Swamy}
+\label{fig:ws_l4042}
+\end{figure}
+\subsection*{Wiki Small Live Web Pages Outlink Statuses} 
+There were a total of 80,686 outlinks for the live web pages and of those links 68,338 unique, \autoref{tbl:ws_ohttp} shows the counts for all statuses. I was surprised to find that the live web wiki pages contained links to ip addressed 25 to be exact. An attempt to retrieve them was made but the requests library\footnote{http://docs.python-requests.org/en/master/} threw exceptions for all of them so they were skipped. Also to my surprise was the low number timeouts that happened during processing which was only 3,504.
+\begin{table}[H]
+	\caption{Wiki Small Live Web Counterparts Outlink Http Statuses}
+	\label{tbl:ws_ohttp}
+	\begin{minipage}{.5\linewidth}
+		\centering
+		\begin{tabular}{lr}
+			\hline
+			status   & count \\
+			\hline
+			ip       & 25    \\
+			timedout & 3,504  \\
+			200      & 42,315 \\
+			203      & 1     \\
+			204      & 2     \\
+			300      & 1     \\
+			301      & 12,606 \\
+			302      & 3,423  \\
+			303      & 2,253  \\
+			307      & 29    \\
+			400      & 35    \\
+			401      & 36    \\
+			403      & 242   \\
+			\hline
+		\end{tabular}
+	\end{minipage} %
+	\begin{minipage}{.5\linewidth}
+		\centering
+		\begin{tabular}{lr}
+			\hline
+			status & count \\
+			\hline
+			404      & 3,963  \\
+			405    & 546   \\
+			406    & 1     \\
+			408    & 1     \\
+			409    & 2     \\
+			410    & 27    \\
+			415    & 2     \\
+			429    & 6     \\
+			500    & 103   \\
+			501    & 5     \\
+			502    & 33    \\
+			503    & 68    \\
+			504    & 1     \\
+			520    & 15    \\
+			\hline
+		\end{tabular}
+	\end{minipage} 
+\end{table}
+During the retrieval of these statuses I noticed a good number of urls were to web archives, so naturally I had to find out how healthy these links are. \autoref{tbl:ws_archives} shows the total number of uri-ms for each archive. Please note that archive.org's count is different than web.archive.org's as archive.org pointed to archive collection where as the latter was a true uri-m. The archive with the most dominate presence was web.archive.org with 2,049 uri-ms which is 2.5\% of the total out bound links.
+\begin{table}[H]
+	\caption{Web Archives Represented in Live Web Wiki Small Outlinks}
+	\label{tbl:ws_archives}
+	\centering
+\begin{tabular}{lrr}
+	\hline
+	Archive                            & Count & Percent Of Total Non-Wiki Outlinks \\
+	\hline
+	archive.org                        &     263 & 0.325955\%                   \\
+ archive.today                      &       1 & 0.001239\%                   \\
+ britishnewspaperarchive.co.uk      &       5 & 0.006197\%                   \\
+ web.archive.org                    &    2,049 & 2.539474\%                   \\
+ webarchive.loc.gov                 &       2 & 0.002479\%                   \\
+ webarchive.nationalarchives.gov.uk &       7 & 0.008676\%                   \\
+ webcitation.org                    &     269 & 0.333391\%                   \\
+	\hline
+\end{tabular}
+\end{table}
+Sadly as seen in \autoref{tbl:ws_archives_stat} not all uri-ms are healthy but most of the non 200 are 3xx so their may be hope.
+\begin{table}[H]
+	\caption{Web Archives Outlink Statuses}
+	\label{tbl:ws_archives_stat}
+		\begin{minipage}{.5\linewidth}
+	\centering
+	\begin{tabular}{lrr}
+\hline
+ Archive                            &   Status &   Count \\
+\hline
+  archive.org &      200 &     235 \\
+ archive.org &      301 &       1 \\
+ archive.org &      302 &       4 \\
+ archive.org &      403 &       1 \\
+ archive.org &      404 &       6 \\
+  archive.today &      301 &       1 \\
+ britishnewspaperarchive.co.uk      &      302 &       5 \\
+\hline
+\end{tabular}
+	\end{minipage} 
+	\begin{minipage}{.5\linewidth}
+		\centering
+		\begin{tabular}{lrr}
+\hline
+ Archive                            &   Status &   Count \\
+\hline
+ web.archive.org &      200 &    1,863 \\
+ web.archive.org &      302 &      78 \\
+ web.archive.org &      400 &       3 \\
+ web.archive.org &      403 &       9 \\
+ web.archive.org &      404 &      22 \\
+ webarchive.loc.gov                 &      200 &       2 \\
+ webarchive.nationalarchives.gov.uk &      200 &       7 \\
+ webcitation.org &      200 &     258 \\
+\hline
+\end{tabular}
+	\end{minipage} 
+\end{table}
+Also only 101 time outs where encountered during the uri-m health check as seen in table \autoref{tbl:ws_archives_stat_to}.
+\begin{table}[H]
+	\caption{Web Archives Outlinks  Timed Out Count}
+	\label{tbl:ws_archives_stat_to}
+	\centering
+\begin{tabular}{lr}
+\hline
+ Archive                            &   Times Connection Timed Out \\
+\hline
+ archive.org                        &               16 \\
+ web.archive.org                    &             74\\
+ webcitation.org                    &               11 \\
+\hline
+\end{tabular}
+\end{table}
+\subsection*{Wiki Small Dataset vs Live Web Counterparts File Sizes} 
+\autoref{fig:ws_fdif} shows the file size differences for all 5800 live web counterparts. The difference was calculated by subtracting the live webs file size from the datasets. It must be noted that the dataset versions were pre-sanatized to remove all extra markup (including text not about the article) and given the age differences the dataset versions do not include any internal changes that wikipedia made to the pages representation.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{wikismall_dif.png}
+\caption{Wiki Small File Differences From Live Web Counterparts}
+\label{fig:ws_fdif}
+\end{figure}
+\subsection*{Wiki Small Dataset vs Live Web Counterparts Vocabulary Growth} 
+Since the live web files contain more mark up and text than the datasets I simply plotted the two counts using the code for assignment 2 \autoref{fig:ws_vocab} shows this graph.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{wikismall_vocab_compare.png}
+\caption{Wiki Small Vocab Growth Comparison}
+\label{fig:ws_vocab}
+\end{figure}
+\begin{code}
+\captionof{listing}{Wiki Small Code} 
+\label{code:wsmall}
+	\pycode{code/wikiq.py}
+\end{code}
+\begin{code}
+\captionof{listing}{Wiki Small Helper Code} 
+\label{code:wsmall_help}
+	\pycode{code/wiki_helpers.py}
+\end{code}
+\begin{code}
+\captionof{listing}{Wiki Small Vocab} 
+\label{code:wsmall_vocab}
+	\pycode{code/wiki_vocab.py}
+\end{code}
+\begin{code}
+\captionof{listing}{Wiki Small Plotter} 
+\label{code:wsmall_plotter}
+	\rcode{code/wiki_plotter.py}
+\end{code}
 \newpage
 \begin{code}
 \captionof{listing}{General Utility Functions} 
